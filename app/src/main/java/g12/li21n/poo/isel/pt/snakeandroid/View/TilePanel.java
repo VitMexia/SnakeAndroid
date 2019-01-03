@@ -16,7 +16,7 @@ import android.widget.Toast;
  * Este import deve ser adaptado para usar a classe R do projeto
  * import pt.isel.poo.<package>.R;
  */
-import pt.isel.poo.snake.R;
+import g12.li21n.poo.isel.pt.snakeandroid.R;
 
 /**
  * A specialization of View to manage a panel of <b>tiles</b>.</br> 
