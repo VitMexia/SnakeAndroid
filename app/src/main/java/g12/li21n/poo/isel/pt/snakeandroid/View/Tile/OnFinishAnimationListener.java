@@ -1,4 +1,4 @@
-package g12.li21n.poo.isel.pt.snakeandroid.View;
+package g12.li21n.poo.isel.pt.snakeandroid.View.Tile;
 
 /**
  * Interface to implemented by listeners of animations.

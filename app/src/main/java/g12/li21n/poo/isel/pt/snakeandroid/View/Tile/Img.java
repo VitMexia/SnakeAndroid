@@ -1,4 +1,4 @@
-package g12.li21n.poo.isel.pt.snakeandroid.View;
+package g12.li21n.poo.isel.pt.snakeandroid.View.Tile;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -1,4 +1,4 @@
-package g12.li21n.poo.isel.pt.snakeandroid.View;
+package g12.li21n.poo.isel.pt.snakeandroid.View.Tile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

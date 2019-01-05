@@ -13,7 +13,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
 
   Example:
-    <g12.li21n.poo.isel.pt.snakeandroid.View.TilePanel
+    <g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TilePanel
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:widthTiles="7"
