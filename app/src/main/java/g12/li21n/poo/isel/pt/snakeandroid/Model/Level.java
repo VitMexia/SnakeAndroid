@@ -8,8 +8,9 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.DeadCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
 
-public class Level {
+public class Level implements OnBeatListener {
 
     private int levelNumber, appleCount, startApples;
 
@@ -178,6 +179,11 @@ public class Level {
 
         cell.setPosition(l, c);
         mapHolder.setCellAt(cell, cell.getPosition());
+
+    }
+
+    @Override
+    public void onBeat(long beat, long time) {
 
     }
 

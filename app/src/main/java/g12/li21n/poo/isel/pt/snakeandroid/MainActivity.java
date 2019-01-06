@@ -1,14 +1,10 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
-import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,9 +15,9 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Level;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Loader;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.CellTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.EmptyTile;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Animator;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TilePanel;
-import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TileView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private  TextView  scoreNumberView;
     private Game model;                                     // Model of game
     private Level level;                                    // Model of current level
-    private TilePanel view;                                 // View of cells
+    private TilePanel view;
+    private Animator animator;
     //private TileView tView;
     private static final int STEP_TIME = 300;               // Milliseconds by step
     private long time;                                      // Current time for next step
@@ -72,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
             model.setListener(updater);                             // Set listener of game
             //tView = new TileView(mainActivity);
 
-//            level = model.loadNextLevel();
-//            playLevel(mainActivity);
+            level = model.loadNextLevel();
+            playLevel(mainActivity);
 
-            while ((level = model.loadNextLevel()) != null)       // Load level model
-                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-                {  // Play level
-                   // win.message("Bye.");
-                    return;
-                }
+//            while ((level = model.loadNextLevel()) != null)       // Load level model
+//                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
+//                {  // Play level
+//                   // win.message("Bye.");
+//                    return;
+//                }
            // win.message("No more Levels");
         }
         catch (Loader.LevelFormatException e){
@@ -111,10 +108,9 @@ public class MainActivity extends AppCompatActivity {
 
         view = findViewById(R.id.panel);// Create view for cells
         view.setSize(width, height);
-        view.getAnimator();
-//        win.clear();                                                    // Clear area of previous level
-//        view.center(WIN_HEIGHT,WIN_WIDTH);
-// Center view in area
+        animator = view.getAnimator();
+
+
 
 //        levelNumberView.setText(level.getNumber());
 //        applesNumberView.setText(level.getRemainingApples());
@@ -122,24 +118,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
-//            for (int c = 0; c < width; ++c) {
-//
-//                TileView tView = new TileView(mainActivity);
-//
-//                view.setTile(l, c, CellTile.tileOf(mainActivity, level.getCell(c, l)));
-//                tView.setTile(CellTile.tileOf(mainActivity, level.getCell(c, l)));
-//
-//            }
-//        }
-        level.setObserver(updater);                                     // Set listener of level
-        time = System.currentTimeMillis();                              // Set step time
-        do
-            play();
+        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
+            for (int c = 0; c < width; ++c) {
+                view.setTile(l, c, CellTile.tileOf(mainActivity, level.getCell(c, l)));
+                animator.getAnim(CellTile.tileOf(mainActivity, level.getCell(c, l)));
+            }
+        }
 
-        while ( !escaped && !level.isFinished() );
-//        if (escaped || level.snakeIsDead()) return false;
-//        win.message("You win");
+       // animator.
+//        level.setObserver(updater);                                     // Set listener of level
+//        time = System.currentTimeMillis();                              // Set step time
+//        do
+//            play();
+//
+//        while ( !escaped && !level.isFinished() );
+////        if (escaped || level.snakeIsDead()) return false;
+////        win.message("You win");
         return true;                   // Verify win conditions; false: finished without complete
     }
 
@@ -174,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
     private Updater updater = new Updater();
 
     private void play() {
+
+
         time += STEP_TIME;                  // Adjust step time
 
 
@@ -185,4 +181,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!paused) level.step();
     }
+
+
 }

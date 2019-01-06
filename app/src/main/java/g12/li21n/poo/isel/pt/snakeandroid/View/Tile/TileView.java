@@ -50,9 +50,11 @@ public class TileView extends View {
     protected int getSuggestedMinimumHeight() { return MIN_SIDE; }
 
     private static Paint paint = new Paint();
+
     static {
         paint.setColor(Color.DKGRAY);
     }
+
     private static Tile defaultTile = new Tile() {
         @Override
         public void draw( Canvas canvas, int side) {
