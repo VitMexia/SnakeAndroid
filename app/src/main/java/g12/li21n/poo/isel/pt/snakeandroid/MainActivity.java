@@ -1,5 +1,7 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +17,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Level;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Loader;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.CellTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.EmptyTile;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.AnimTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Animator;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TilePanel;
@@ -29,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Game model;                                     // Model of game
     private Level level;                                    // Model of current level
     private TilePanel view;
-    private Animator animator;
+    private Context context;
+
     //private TileView tView;
     private static final int STEP_TIME = 300;               // Milliseconds by step
     private long time;                                      // Current time for next step
@@ -42,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        this.context = this;
         levelNumberView = findViewById(R.id.levelText);
         applesNumberView = findViewById(R.id.appleText);
         scoreNumberView = findViewById(R.id.scoreText);
@@ -66,19 +70,20 @@ public class MainActivity extends AppCompatActivity {
 
         try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
             model = new Game(file);                                 // Create game model
-            model.setListener(updater);                             // Set listener of game
-            //tView = new TileView(mainActivity);
+           // model.setListener(updater);                             // Set listener of game
 
-            level = model.loadNextLevel();
-            playLevel(mainActivity);
+            view = findViewById(R.id.panel);// Create view for cells
 
-//            while ((level = model.loadNextLevel()) != null)       // Load level model
-//                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-//                {  // Play level
-//                   // win.message("Bye.");
-//                    return;
-//                }
-           // win.message("No more Levels");
+            while ((level = model.loadNextLevel() ) != null )
+                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
+                {  // Play level
+                    //win.message("Bye.");
+                    return;
+                }
+
+
+
+
         }
         catch (Loader.LevelFormatException e){
             Log.v("test", "LevelFormatException");
@@ -103,36 +108,31 @@ public class MainActivity extends AppCompatActivity {
         // Opens panel of tiles with dimensions appropriate to the current level.
         // Starts the viewer for each model cell.
         // Shows the initial state of all cells in the model.
+
         int height = level.getHeight(), width = level.getWidth();
 
 
         view = findViewById(R.id.panel);// Create view for cells
         view.setSize(width, height);
-        animator = view.getAnimator();
 
 
-
-//        levelNumberView.setText(level.getNumber());
-//        applesNumberView.setText(level.getRemainingApples());
-//        scoreNumberView.setText(model.getScore());
-
-
+        levelNumberView.setText(Integer.toString(level.getNumber()));
+        applesNumberView.setText(Integer.toString(level.getRemainingApples()));
+        scoreNumberView.setText(Integer.toString(model.getScore()));
 
         for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
             for (int c = 0; c < width; ++c) {
                 view.setTile(l, c, CellTile.tileOf(mainActivity, level.getCell(c, l)));
-                animator.getAnim(CellTile.tileOf(mainActivity, level.getCell(c, l)));
             }
         }
 
-       // animator.
-//        level.setObserver(updater);                                     // Set listener of level
-//        time = System.currentTimeMillis();                              // Set step time
-//        do
-//            play();
-//
-//        while ( !escaped && !level.isFinished() );
-////        if (escaped || level.snakeIsDead()) return false;
+        level.setObserver(updater);                                     // Set listener of level
+        time = System.currentTimeMillis();                              // Set step time
+        do
+            play();
+
+        while ( !escaped && !level.isFinished() );
+        if (escaped || level.snakeIsDead()) return false;
 ////        win.message("You win");
         return true;                   // Verify win conditions; false: finished without complete
     }
@@ -150,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
         public void cellUpdated(int l, int c, Cell cell) { view.getTile(l,c).setSelect(true); }
         @Override
         public void cellCreated(int l, int c, Cell cell) {
-            //view.setTile(l,c,CellTile.tileOf( cell));
+            view.setTile(l,c,CellTile.tileOf( context,cell));
+            view.invalidate(l,c);
         }
         @Override
         public void cellRemoved(int l, int c) { view.setTile(l,c,new EmptyTile()); }
@@ -159,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
             Tile tile = view.getTile(fromL,fromC);
             assert !(tile instanceof EmptyTile);
             view.setTile(toL,toC,tile);
+            view.invalidate(toL, toC);
             cellRemoved(fromL,fromC);
         }
         @Override
@@ -168,17 +170,28 @@ public class MainActivity extends AppCompatActivity {
     private Updater updater = new Updater();
 
     private void play() {
-
+        long waitTime;
 
         time += STEP_TIME;                  // Adjust step time
 
+        waitTime = time - System.currentTimeMillis();
 
-        if (true) {
-            Dir dir = null;
+        if(waitTime<= 0) return;
 
 
-            if (dir!=null) level.setSnakeDirection(dir);
+        try {
+            Thread.sleep(waitTime);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+//
+//        if (true) {
+//            Dir dir = Dir.UP;
+//
+//
+//            if (dir!=null) level.setSnakeDirection(dir);
+//        }
         if (!paused) level.step();
     }
 
