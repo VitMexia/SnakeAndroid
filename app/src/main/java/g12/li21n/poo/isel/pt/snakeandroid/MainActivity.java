@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private Level level;                                    // Model of current level
     private TilePanel view;
     private Context context;
+    private Button okButton;
+    private TextView userInfo;
 
     //private TileView tView;
     private static final int STEP_TIME = 500;               // Milliseconds by step
@@ -53,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
         levelNumberView = findViewById(R.id.levelText);
         applesNumberView = findViewById(R.id.appleText);
         scoreNumberView = findViewById(R.id.scoreText);
+        okButton = findViewById(R.id.okButtonId);
+        userInfo = findViewById(R.id.userInfoTextId);
+
+
 
         this.run(this);
     }
@@ -62,17 +69,17 @@ public class MainActivity extends AppCompatActivity {
 
         try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
             model = new Game(file);                                 // Create game model
-           // model.setListener(updater);                             // Set listener of game
+            model.setListener(updater);                             // Set listener of game
 
             view = findViewById(R.id.panel);// Create view for cells
             level = model.loadNextLevel();
-            playLevel(mainActivity);
-//            while ((level = model.loadNextLevel() ) != null )
-//                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-//                {  // Play level
-//                    //win.message("Bye.");
-//                    return;
-//                }
+//            playLevel(mainActivity);
+            while ((level = model.loadNextLevel() ) != null )
+                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
+                {  // Play level
+                    //win.message("Bye.");
+                    return;
+                }
 
         }
         catch (Loader.LevelFormatException e){
@@ -184,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     private class Updater implements Game.Listener, Level.Observer {
         @Override
         public void scoreUpdated(int score) {
-            scoreNumberView.setText(model.getScore());
+            scoreNumberView.setText(Integer.toString(model.getScore()));
         }
         @Override
         public void cellUpdated(int l, int c, Cell cell) {
@@ -200,8 +207,7 @@ public class MainActivity extends AppCompatActivity {
         public void cellRemoved(int l, int c) { view.setTile(c,l,new EmptyTile()); }
         @Override
         public void cellMoved(int fromL, int fromC, int toL, int toC, Cell cell) {
-//            animator.floatTile(fromL, fromC,toL, toC ,100);
-            Tile tile = view.getTile(fromL,fromC);
+            Tile tile = view.getTile(fromC,fromL);
             assert !(tile instanceof EmptyTile);
             view.setTile(toC,toL,tile); // TODO: atenção que estas funções do prof esperam receber X, Y e se dermos L,C fica ao contrário!!!!
             view.invalidate(toC, toL);
