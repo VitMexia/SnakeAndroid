@@ -63,6 +63,7 @@ public class MapHolder {
         return cellMap[position.getLine()][position.getCol()];
     }
 
+    // TODO: precisa rework: não é eficiente, basta manter a lista de posições vazias e ir atualizando a cada adição\remoção (vê o freeCells no meu map manager)
     public LinkedList<Position> getEmptyPositions() {
 
         LinkedList<Position> positions = new LinkedList<>();

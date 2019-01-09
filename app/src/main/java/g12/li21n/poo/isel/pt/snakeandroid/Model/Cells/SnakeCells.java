@@ -38,11 +38,13 @@ public class SnakeCells extends MovingCells {
     //sets the new positions for the player and other snakes
     @Override
     public void doYourThing(int stepCount, MapHolder mapHolder) {
-
+//TODO: mudar isto para um nome mais explícito (move, moveTo etc)
         this.mapHolder = mapHolder;
 
         Position oldPos = getPosition();
         Position newPos = getNewPos();
+
+        // TODO: isto tem que levar rework, o prof vai-se mandar aos arames com tanto if (e isto é complicado de ler para caraças)
 
         if (!isBad) {
             if (stepCount % 10 == 0 && stepCount != 0 && bodyList.size() > 0) {
@@ -93,7 +95,7 @@ public class SnakeCells extends MovingCells {
 
     //depending on what type of cell is on the new position addbody, kill snake
     private void validateNewPos(Position pos) {
-
+//TODO: precisa rework, no mínimo tirar os instanceof/ifs, idealmente ter isto tudo em despacho dinâmico
         Cell cell = mapHolder.getCellAt(pos);
         meal = null;
         if (cell == null) return;
@@ -180,7 +182,7 @@ public class SnakeCells extends MovingCells {
     }
 
     private Dir getDirection(Position pos) {
-
+// TODO: meter o getRandom.. a devolver logo a direção em vez de estar a dar esta volta toda?
         int l = pos.getLine() - getPosition().getLine();
         int c = pos.getCol() - getPosition().getCol();
 

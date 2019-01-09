@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Snake</string>
+    <string name="app_name">POOpy Snake</string>
     <string name="score_label">Score</string>
     <string name="apples_label">Apples</string>
     <string name="level_label">Level</string>

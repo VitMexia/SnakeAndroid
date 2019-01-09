@@ -9,4 +9,13 @@ public enum Dir {
         this.line = line;
         this.column = column;
     }
+
+    /**
+     * Returns true if facing the same direction or the direct opposite
+     * @param dir The direction to compare against
+     * @return If opposite direction
+     */
+    boolean isOppositeOrSame(Dir dir){
+        return Math.abs(dir.column) == Math.abs(this.column) && Math.abs(dir.line) == Math.abs(this.line);
+    }
 }

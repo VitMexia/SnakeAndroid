@@ -143,12 +143,14 @@
         tools:text="0" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/userInfoTextId"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="21dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:minWidth="@dimen/minUserInfoW"
+        android:minHeight="@dimen/minUserInfoH"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/panel" />
 
@@ -159,7 +161,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="OK"
-        app:layout_constraintStart_toEndOf="@+id/textView11"
+        app:layout_constraintStart_toEndOf="@+id/userInfoTextId"
         app:layout_constraintTop_toBottomOf="@+id/panel" />
 
 

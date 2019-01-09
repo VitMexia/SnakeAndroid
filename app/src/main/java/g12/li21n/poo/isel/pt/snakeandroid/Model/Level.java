@@ -10,7 +10,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
 
-public class Level implements OnBeatListener {
+public class Level {
 
     private int levelNumber, appleCount, startApples;
 
@@ -86,9 +86,10 @@ public class Level implements OnBeatListener {
             deadSnake.doYourThing(stepCount, mapHolder);
         }
 
-        playerSize = playerHead.snakeSize;
-        playerHead.doYourThing(stepCount, mapHolder);
+        playerSize = playerHead.snakeSize; // TODO: encapsular
+        playerHead.doYourThing(stepCount++, mapHolder);
         checkMeal(playerHead, mapHolder); // checks what the player ate and acts accordingly
+        // TODO: cada snake é que deveria lidar com o que comeu, no?
 
         if (appleCount == 0) {
             finish = true;
@@ -99,7 +100,6 @@ public class Level implements OnBeatListener {
             finish = true;
             return;
         }
-        stepCount += 1;
 
         if (stepCount % 10 == 0 && stepCount > 0) {
             game.addScore(-1);
@@ -144,27 +144,14 @@ public class Level implements OnBeatListener {
 
     //sets the snake Direction based on user input
     public void setSnakeDirection(Dir dir) {
+//        if (!playerHead.getDirection().isOppositeOrSame(dir))
+            playerHead.setDirection(dir);
 
-        switch (dir) {
-            case UP:
-                if (playerHead.getDirection() != Dir.DOWN) playerHead.setDirection(dir);
-                break;
-            case DOWN:
-                if (playerHead.getDirection() != Dir.UP) playerHead.setDirection(dir);
-                break;
-            case RIGHT:
-                if (playerHead.getDirection() != Dir.LEFT) playerHead.setDirection(dir);
-                break;
-            case LEFT:
-                if (playerHead.getDirection() != Dir.RIGHT) playerHead.setDirection(dir);
-                break;
-        }
     }
 
     //based on Cell type property defines the player and other players (Bad Snakes and Mouses);
     //it also sets the start apples quantity
     public void putCell(int l, int c, Cell cell) {
-
 
         if (cell instanceof SnakeCells && !((SnakeCells) cell).isBad) {
             playerHead = (SnakeCells) cell;
@@ -172,7 +159,7 @@ public class Level implements OnBeatListener {
 
             otherPlayers.add((MovingCells) cell);
         } else if (cell instanceof AppleCell) {
-            startApples += 1;
+            startApples++;
         } else if (cell instanceof MouseCell) {
             otherPlayers.add(0, (MovingCells) cell);
         }
@@ -181,12 +168,6 @@ public class Level implements OnBeatListener {
         mapHolder.setCellAt(cell, cell.getPosition());
 
     }
-
-    @Override
-    public void onBeat(long beat, long time) {
-
-    }
-
 
     public interface Observer {
         public void cellUpdated(int l, int c, Cell cell); //its never used in this implementation

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Snake</string>
+    <string name="app_name">Cobrinha</string>
     <string name="score_label">Pontuação</string>
     <string name="apples_label">Maçãs</string>
     <string name="level_label">Nivel</string>
