@@ -11,6 +11,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.DeadCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.WallCell;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TileView;
 
@@ -19,7 +20,7 @@ public abstract class CellTile implements Tile  {
     public final static int SIDE = 1;
     private int color;
     private int foregroundColor;
-    private char c;
+    protected Dir direction;
 
 
     public void setColor(int color) {
@@ -28,14 +29,9 @@ public abstract class CellTile implements Tile  {
 
     public void setForegroundColor(int color){this.foregroundColor = color;}
 
-    public void setC(char c) {
-        this.c = c;
+    public void setDirection(Dir direction){
+        this.direction = direction;
     }
-
-//    public CellTile(Context context){
-//        super(context);
-//
-//    }
 
     public static CellTile tileOf(Context context, Cell cell) {
 

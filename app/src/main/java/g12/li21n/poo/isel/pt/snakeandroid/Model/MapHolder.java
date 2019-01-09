@@ -55,7 +55,7 @@ public class MapHolder {
         }
         //Correct Columns
         if (position.getCol() == -1) {
-            correctPos.setLine(getWidth() - 1);
+            correctPos.setCol(getWidth() - 1);
         } else if (position.getCol() == getWidth()) {
             correctPos.setCol(0);
         }
