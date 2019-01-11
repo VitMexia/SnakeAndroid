@@ -24,16 +24,20 @@ public class Game {
         input.mark(40 * 1024);
     }
 
-    public Level loadNextLevel() throws Loader.LevelFormatException {
-        try {
+    public Level loadNextLevel(InputStream levelsFile) throws Loader.LevelFormatException {
+        try (InputStream input = new BufferedInputStream(levelsFile);
+        Scanner in = new Scanner(input)){
+            input.mark(40 * 1024);
             input.reset();
-            Scanner in = new Scanner(input);
             curLevel = new Loader(in).load(++levelNumber);
+
             if (curLevel != null) {
                 curLevel.init(this);
             }
+
+            input.close();
             return curLevel;
-        } catch (IOException e) {
+        } catch(Exception e){
             throw new RuntimeException("IOException", e);
         }
     }

@@ -29,7 +29,7 @@ public class Level {
 
         this.levelNumber = levelNumber;
         this.mapHolder = new MapHolder(new Cell[height][width]);
-        this.appleCount = 10;//TODO: Correct to 10
+        this.appleCount = 1;//TODO: Correct to 10
         this.otherPlayers = new LinkedList<>();
         this.deadSnakes = new LinkedList<>();
     }

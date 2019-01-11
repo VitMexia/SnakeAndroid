@@ -1,7 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +17,6 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Level;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Loader;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.CellTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.EmptyTile;
-import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.AnimTile;
-import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Animator;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnTileTouchListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
@@ -53,76 +50,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.context = this;
+
         levelNumberView = findViewById(R.id.levelText);
         applesNumberView = findViewById(R.id.appleText);
         scoreNumberView = findViewById(R.id.scoreText);
         okButton = findViewById(R.id.okButtonId);
         userInfo = findViewById(R.id.userInfoTextId);
-
-
-
-        this.run(this);
-    }
-
-
-    private void run(MainActivity mainActivity) {
-
-        try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
-            model = new Game(file);                                 // Create game model
-            model.setListener(updater);                             // Set listener of game
-
-            view = findViewById(R.id.panel);// Create view for cells
-            level = model.loadNextLevel();
-//            playLevel(mainActivity);
-            while ((level = model.loadNextLevel() ) != null )
-                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-                {  // Play level
-                    //win.message("Bye.");
-                    return;
-                }
-
-        }
-        catch (Loader.LevelFormatException e){
-            Log.v("test", "LevelFormatException");
-            e.printStackTrace();
-        }
-
-        catch (IOException e) {
-            Log.v("test", "IOException");
-            e.printStackTrace();
-
-        } finally {
-            Log.v("test", "Finally");
-        }                                    // Close console window
-    }
-
-    /**
-     * Main loop of each level.
-     * @return true - the level has been completed. false - the player has given up.
-     * @param mainActivity
-     */
-    private boolean playLevel(MainActivity mainActivity) {
-        // Opens panel of tiles with dimensions appropriate to the current level.
-        // Starts the viewer for each model cell.
-        // Shows the initial state of all cells in the model.
-
-        int height = level.getHeight(), width = level.getWidth();
-
-
         view = findViewById(R.id.panel);// Create view for cells
-        view.setSize(width, height);
-
-        levelNumberView.setText(Integer.toString(level.getNumber()));
-        applesNumberView.setText(Integer.toString(level.getRemainingApples()));
-        scoreNumberView.setText(Integer.toString(model.getScore()));
-
-        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
-            for (int c = 0; c < width; ++c) {
-                view.setTile(c,l, CellTile.tileOf(mainActivity, level.getCell(l, c)));
-            }
-        }
-
-        level.setObserver(updater);                                     // Set listener of level
 
         view.setListener(new OnTileTouchListener() {
             @Override
@@ -171,12 +105,76 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.loadNextLevel(this);
+    }
+
+
+    private void loadNextLevel(final MainActivity mainActivity) {
+
+        try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
+            if (model == null){
+                model = new Game(file);                                 // Create game model
+                model.setListener(updater);                             // Set listener of game
+            }
+
+            level = model.loadNextLevel(file);
+//            playLevel(mainActivity);
+//            while ((level = model.loadNextLevel() ) != null )
+//                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
+//                {  // Play level
+//                    //win.message("Bye.");
+//                    return;
+//                }
+
+        }
+        catch (IOException | Loader.LevelFormatException e){
+            Log.e("Snake", "Error loading level.", e);
+        }
+
+        int height = level.getHeight(), width = level.getWidth();
+
+        view = findViewById(R.id.panel);// Create view for cells
+        view.setSize(width, height);
+        level.setObserver(updater);                                     // Set listener of level
+
+        levelNumberView.setText(Integer.toString(level.getNumber()));
+        applesNumberView.setText(Integer.toString(level.getRemainingApples()));
+        scoreNumberView.setText(Integer.toString(model.getScore()));
+
+        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
+            for (int c = 0; c < width; ++c) {
+                view.setTile(c,l, CellTile.tileOf(mainActivity, level.getCell(l, c)));
+            }
+        }
+
         view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
             @Override
             public void onBeat(long beat, long time) {
-                if (!paused) level.step();
+                if (!paused){
+                    level.step();
+                    if (level.isFinished())
+                        loadNextLevel(mainActivity);
+                }
             }
         });
+
+    }
+
+    /**
+     * Main loop of each level.
+     * @return true - the level has been completed. false - the player has given up.
+     * @param mainActivity
+     */
+    private boolean playLevel(MainActivity mainActivity) {
+        // Opens panel of tiles with dimensions appropriate to the current level.
+        // Starts the viewer for each model cell.
+        // Shows the initial state of all cells in the model.
+
+
+
+
+
+
 
 
 //        while ( !escaped && !level.isFinished() );
