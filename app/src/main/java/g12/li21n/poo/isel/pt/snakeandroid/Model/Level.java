@@ -9,6 +9,8 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnFinishAnimationListener;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnFinishListener;
 
 public class Level {
 
@@ -24,6 +26,8 @@ public class Level {
     private boolean finish;
     private Observer updater;
     private int stepCount;
+
+    private OnFinishListener onFinishListener;
 
     public Level(int levelNumber, int height, int width) {
 
@@ -59,6 +63,8 @@ public class Level {
     }
 
     public boolean isFinished() {
+
+
         return finish;
     }
 
@@ -92,11 +98,13 @@ public class Level {
         // TODO: cada snake é que deveria lidar com o que comeu, no?
 
         if (appleCount == 0) {
+            onFinishListener.onFinish();
             finish = true;
             return;
         }
 
         if (playerHead.isDead) {
+            onFinishListener.onFinish();
             finish = true;
             return;
         }
@@ -167,6 +175,10 @@ public class Level {
         cell.setPosition(l, c);
         mapHolder.setCellAt(cell, cell.getPosition());
 
+    }
+
+    public void setOnFinishListener(OnFinishListener listener){
+            onFinishListener = listener;
     }
 
     public interface Observer {

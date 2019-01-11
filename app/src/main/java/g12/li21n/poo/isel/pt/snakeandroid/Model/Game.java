@@ -26,14 +26,14 @@ public class Game {
 
     public Level loadNextLevel() throws Loader.LevelFormatException {
         try {
-            input.reset();
+            //input.reset();
             Scanner in = new Scanner(input);
             curLevel = new Loader(in).load(++levelNumber);
             if (curLevel != null) {
                 curLevel.init(this);
             }
             return curLevel;
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException("IOException", e);
         }
     }

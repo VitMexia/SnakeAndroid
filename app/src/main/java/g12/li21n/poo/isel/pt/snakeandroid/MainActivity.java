@@ -21,6 +21,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.EmptyTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.AnimTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Animator;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
+import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnFinishListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnTileTouchListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TilePanel;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView userInfo;
 
     //private TileView tView;
-    private static final int STEP_TIME = 500;               // Milliseconds by step
+    private static final int STEP_TIME = 700;               // Milliseconds by step
     private boolean escaped = false;
     private boolean paused = false;
     private boolean dragDone = true;
@@ -65,21 +66,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void run(MainActivity mainActivity) {
+    private void run(final MainActivity mainActivity) {
 
         try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
-            model = new Game(file);                                 // Create game model
-            model.setListener(updater);                             // Set listener of game
 
-            view = findViewById(R.id.panel);// Create view for cells
+           if(model==null) {
+               model = new Game(file);                                 // Create game model
+               model.setListener(updater);                             // Set listener of game
+           }
+
             level = model.loadNextLevel();
-//            playLevel(mainActivity);
-            while ((level = model.loadNextLevel() ) != null )
-                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-                {  // Play level
-                    //win.message("Bye.");
-                    return;
-                }
+
+
+            playLevel(mainActivity);
 
         }
         catch (Loader.LevelFormatException e){
@@ -93,18 +92,23 @@ public class MainActivity extends AppCompatActivity {
 
         } finally {
             Log.v("test", "Finally");
-        }                                    // Close console window
+        }
+
+
+
+
     }
 
     /**
      * Main loop of each level.
      * @return true - the level has been completed. false - the player has given up.
-     * @param mainActivity
+
      */
-    private boolean playLevel(MainActivity mainActivity) {
+    private void playLevel(final MainActivity mainActivity) {
         // Opens panel of tiles with dimensions appropriate to the current level.
         // Starts the viewer for each model cell.
         // Shows the initial state of all cells in the model.
+        view = findViewById(R.id.panel);// Create view for cells
 
         int height = level.getHeight(), width = level.getWidth();
 
@@ -118,13 +122,22 @@ public class MainActivity extends AppCompatActivity {
 
         for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
             for (int c = 0; c < width; ++c) {
-                view.setTile(c,l, CellTile.tileOf(mainActivity, level.getCell(l, c)));
+                view.setTile(c,l, CellTile.tileOf(context, level.getCell(l, c)));
             }
         }
 
         level.setObserver(updater);                                     // Set listener of level
+        level.setOnFinishListener(new OnFinishListener() {
+            @Override
+            public void onFinish() {
+                view.removeHeartbeatListener();
+                run(mainActivity);
+
+            }
+        });
 
         view.setListener(new OnTileTouchListener() {
+
             @Override
             public boolean onClick(int xTile, int yTile) {
                 Log.v("Snake", "onClick");
@@ -171,18 +184,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
-            @Override
-            public void onBeat(long beat, long time) {
-                if (!paused) level.step();
-            }
-        });
+
+            view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
+                @Override
+                public void onBeat(long beat, long time) {
+                    if (!paused) level.step();
+                }
+            });
 
 
-//        while ( !escaped && !level.isFinished() );
-        if (escaped || level.snakeIsDead()) return false;
-////        win.message("You win");
-        return true;                   // Verify win conditions; false: finished without complete
+
     }
 
     /**
@@ -221,3 +232,5 @@ public class MainActivity extends AppCompatActivity {
     private Updater updater = new Updater();
 
 }
+
+
