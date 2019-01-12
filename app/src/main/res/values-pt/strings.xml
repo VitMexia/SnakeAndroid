@@ -4,4 +4,7 @@
     <string name="score_label">Pontuação</string>
     <string name="apples_label">Maçãs</string>
     <string name="level_label">Nivel</string>
+    <string name="level_finished">Acabou o Nivel! Jogar o próximo Nivel?</string>
+    <string name="victory_text">VITÓRIA!</string>
+    <string name="closeButtonText">Fechar</string>
 </resources>
