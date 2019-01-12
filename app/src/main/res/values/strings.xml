@@ -3,4 +3,7 @@
     <string name="score_label">Score</string>
     <string name="apples_label">Apples</string>
     <string name="level_label">Level</string>
+    <string name="level_finished">Level finished! Load next level?</string>
+    <string name="victory_text">VICTORY!</string>
+    <string name="closeButtonText">Close</string>
 </resources>

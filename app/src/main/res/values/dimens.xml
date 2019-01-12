@@ -3,4 +3,5 @@
     <dimen name="minUserInfoW">100dp</dimen>
     <dimen name="minUserInfoH">50dp</dimen>
     <dimen name="boardTextSize">15sp</dimen>
+    <dimen name="victoryTextSize">40sp</dimen>
 </resources>

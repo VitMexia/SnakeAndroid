@@ -1,11 +1,15 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
         okButton = findViewById(R.id.okButtonId);
         userInfo = findViewById(R.id.userInfoTextId);
         view = findViewById(R.id.panel);// Create view for cells
+
+        okButton.setVisibility(View.GONE);
+        userInfo.setVisibility(View.GONE);
 
         view.setListener(new OnTileTouchListener() {
             @Override
@@ -116,15 +123,10 @@ public class MainActivity extends AppCompatActivity {
                 model = new Game(file);                                 // Create game model
                 model.setListener(updater);                             // Set listener of game
             }
-
             level = model.loadNextLevel(file);
-//            playLevel(mainActivity);
-//            while ((level = model.loadNextLevel() ) != null )
-//                if (!playLevel(mainActivity) )//|| !win.question("Next level"))
-//                {  // Play level
-//                    //win.message("Bye.");
-//                    return;
-//                }
+
+            if (level == null)
+                onDestroy();
 
         }
         catch (IOException | Loader.LevelFormatException e){
@@ -152,35 +154,37 @@ public class MainActivity extends AppCompatActivity {
             public void onBeat(long beat, long time) {
                 if (!paused){
                     level.step();
-                    if (level.isFinished())
-                        loadNextLevel(mainActivity);
+                    if (level.isFinished()) {
+                        Toast.makeText(mainActivity, "You beat level " + level.getNumber() + "!", Toast.LENGTH_LONG); // TODO: não funciona por algum motivo, tentar resolver
+                        displayNextLevelButton(mainActivity);
+                    }
                 }
             }
         });
 
     }
 
-    /**
-     * Main loop of each level.
-     * @return true - the level has been completed. false - the player has given up.
-     * @param mainActivity
-     */
-    private boolean playLevel(MainActivity mainActivity) {
-        // Opens panel of tiles with dimensions appropriate to the current level.
-        // Starts the viewer for each model cell.
-        // Shows the initial state of all cells in the model.
+    private void displayNextLevelButton(final MainActivity activity){
+        view.removeHeartbeatListener();
+        okButton.setVisibility(View.VISIBLE);
+        userInfo.setVisibility(View.VISIBLE);
 
+        userInfo.setText(R.string.level_finished);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadNextLevel(activity);
+                okButton.setVisibility(View.GONE);
+                userInfo.setVisibility(View.GONE);
+            }
+        });
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        startActivity(new Intent(MainActivity.this, VictoryActivity.class));
 
-
-
-
-
-
-//        while ( !escaped && !level.isFinished() );
-        if (escaped || level.snakeIsDead()) return false;
-////        win.message("You win");
-        return true;                   // Verify win conditions; false: finished without complete
     }
 
     /**
