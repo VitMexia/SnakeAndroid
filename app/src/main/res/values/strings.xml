@@ -6,5 +6,7 @@
     <string name="level_finished">Level finished! Load next level?</string>
     <string name="victory_text">VICTORY!</string>
     <string name="closeButtonText">Close</string>
+    <string name="beat_level">You\'ve Beaten Level</string>
+    <string name="defeat_text">You are dead!!</string>
 
 </resources>

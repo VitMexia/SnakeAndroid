@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".VictoryActivity"></activity>
+        <activity android:name=".DefeatActivity"></activity>
     </application>
 
 </manifest>

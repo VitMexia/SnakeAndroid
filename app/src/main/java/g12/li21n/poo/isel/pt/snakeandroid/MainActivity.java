@@ -1,6 +1,5 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean paused = false;
     private boolean dragDone = true;
     private int xStart, yStart;
+    private int finalSteps = 2;
+
+    private boolean wonLevelGame;
 
 
 
@@ -125,9 +127,11 @@ public class MainActivity extends AppCompatActivity {
             }
             level = model.loadNextLevel(file);
 
-            if (level == null)
-                onDestroy();
-
+            if (level == null) {
+                finishGame();
+                return;
+            }
+            wonLevelGame = false;
         }
         catch (IOException | Loader.LevelFormatException e){
             Log.e("Snake", "Error loading level.", e);
@@ -135,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
         int height = level.getHeight(), width = level.getWidth();
 
-        view = findViewById(R.id.panel);// Create view for cells
+        //view = findViewById(R.id.panel);// Create view for cells
         view.setSize(width, height);
         level.setObserver(updater);                                     // Set listener of level
 
@@ -153,10 +157,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBeat(long beat, long time) {
                 if (!paused){
-                    level.step();
+
                     if (level.isFinished()) {
-                        Toast.makeText(mainActivity, "You beat level " + level.getNumber() + "!", Toast.LENGTH_LONG); // TODO: não funciona por algum motivo, tentar resolver
-                        displayNextLevelButton(mainActivity);
+
+                        if(!level.snakeIsDead())
+                        {
+                            Toast.makeText(mainActivity, getString(R.string.beat_level)
+                                    + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
+                            wonLevelGame = true;
+                            displayNextLevelButton(mainActivity);
+                        }else if(finalSteps <=0){
+
+                            finishGame();
+                        }
+                        else{
+                            finalSteps -=1; //run 2 steps after  snake is dead
+                        }
+                    }
+                    else{
+
+                        level.step();
+
                     }
                 }
             }
@@ -180,10 +201,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        startActivity(new Intent(MainActivity.this, VictoryActivity.class));
+
+    private void finishGame(){
+
+        view.removeHeartbeatListener();
+        Intent intent;
+
+        if(wonLevelGame) {
+             intent  = new Intent(MainActivity.this, VictoryActivity.class);
+        }else{
+             intent  = new Intent(MainActivity.this, DefeatActivity.class);
+        }
+
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
 
     }
 

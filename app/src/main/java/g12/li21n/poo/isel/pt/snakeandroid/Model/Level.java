@@ -70,8 +70,9 @@ public class Level {
 
         //goes through the list of mouses and Bad Snakes and each one does its thing
         for (MovingCells others : otherPlayers) {
-            if (others.isDead && others instanceof MouseCell)
-                otherPlayers.remove(others);
+            if (others.isDead && others instanceof MouseCell) {
+                //otherPlayers.remove(others);
+            }
             else
                 others.doYourThing(stepCount, mapHolder);
 
@@ -91,15 +92,15 @@ public class Level {
         checkMeal(playerHead, mapHolder); // checks what the player ate and acts accordingly
         // TODO: cada snake é que deveria lidar com o que comeu, no?
 
-        if (appleCount == 0) {
+        if (appleCount == 0 || playerHead.isDead) {
             finish = true;
             return;
         }
 
-        if (playerHead.isDead) {
-            finish = true;
-            return;
-        }
+//        if (playerHead.isDead) {
+//            finish = true;
+//            return;
+//        }
 
         if (stepCount % 10 == 0 && stepCount > 0) {
             game.addScore(-1);

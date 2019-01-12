@@ -203,7 +203,7 @@ public class SnakeCells extends MovingCells {
         }
     }
 
-    //set the properties of a deadSnake and creates an instance of a DeadCel. Also removes all the body cells of the snake when bad
+    //set the properties of a deadsnake and creates an instance of a DeadCel. Also removes all the body cells of the snake when bad
     public void killSnake() {
         isDead = true;
         DeadCell dc = new DeadCell();
