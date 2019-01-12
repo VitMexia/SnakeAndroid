@@ -10,7 +10,7 @@ public class MouseCell extends MovingCells {
     }
 
     @Override
-    public void doYourThing(int stepCount, MapHolder mapHolder) {
+    public void move(int stepCount, MapHolder mapHolder) {
 
         this.mapHolder = mapHolder;
 

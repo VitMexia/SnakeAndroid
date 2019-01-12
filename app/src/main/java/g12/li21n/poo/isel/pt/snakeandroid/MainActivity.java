@@ -164,7 +164,9 @@ public class MainActivity extends AppCompatActivity {
                         {
                             Toast.makeText(mainActivity, getString(R.string.beat_level)
                                     + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
+
                             wonLevelGame = true;
+
                             displayNextLevelButton(mainActivity);
                         }else if(finalSteps <=0){
 

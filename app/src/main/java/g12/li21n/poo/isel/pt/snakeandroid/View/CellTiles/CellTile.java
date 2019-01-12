@@ -38,7 +38,7 @@ public abstract class CellTile implements Tile  {
         if(cell == null){
             return new EmptyTile();
         }
-        else if(cell instanceof SnakeCells && !((SnakeCells)cell).isBad){
+        else if(cell instanceof SnakeCells && !((SnakeCells)cell).isBad()){
             return new HeadTile();
         }
         else if(cell instanceof DeadCell && !((DeadCell)cell).isBad){
@@ -56,7 +56,7 @@ public abstract class CellTile implements Tile  {
         else if(cell instanceof MouseCell){
             return new MouseTile(context);
         }
-        else if(cell instanceof SnakeCells && ((SnakeCells)cell).isBad){
+        else if(cell instanceof SnakeCells && ((SnakeCells)cell).isBad()){
             return new BadSnakeTile();
         }
         else if(cell instanceof DeadCell && ((DeadCell)cell).isBad){
