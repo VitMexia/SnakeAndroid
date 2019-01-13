@@ -1,6 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
