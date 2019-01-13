@@ -2,7 +2,9 @@ package g12.li21n.poo.isel.pt.snakeandroid;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,26 +29,27 @@ import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnTileTouchListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.TilePanel;
 
+/**
+ * Code for game control
+ */
 public class MainActivity extends AppCompatActivity {
-
-    //private static final String LEVELS_FILE = "levels.txt";
     private static int LEVELS_FILE = R.raw.levels;          // Name of levels file
-    private TextView levelNumberView;
-    private TextView applesNumberView;
-    private TextView scoreNumberView;
+    private TextView levelNumberView;                       // Level board
+    private TextView applesNumberView;                      // Remaining apples board
+    private TextView scoreNumberView;                       // Score board
     private Game model;                                     // Model of game
     private Level level;                                    // Model of current level
-    private TilePanel view;
+    private TilePanel view;                                 // Game panel
     private Context context;
-    private Button okButton;
-    private TextView userInfo;
+    private Button okButton;                                // Button for level transitions
+    private TextView userInfo;                              // Text box for user information (level transitions)
 
-    //private TileView tView;
     private static final int STEP_TIME = 500;               // Milliseconds by step
     private boolean paused = false;
-    private boolean dragDone = true;
+    private boolean dragDone = true;                        // Auxiliary var for swipe motions
     private int xStart, yStart;
     private boolean wonLevelGame;
+    private Updater updater;
 
 
     @Override
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         okButton.setVisibility(View.GONE);
         userInfo.setVisibility(View.GONE);
 
+        updater = new Updater();
+
         view.setListener(new OnTileTouchListener() {
             @Override
             public boolean onClick(int xTile, int yTile) {
@@ -72,9 +77,17 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
+            /**
+             * Called when a new swipe movement starts.
+             * @param xFrom x coordinate of the tile that was trying to drag
+             * @param yFrom y coordinate of the tile that was trying to drag
+             * @param xTo x coordinate to drag to
+             * @param yTo y coordinate to drag to
+             * @return
+             */
             @Override
             public boolean onDrag(int xFrom, int yFrom, int xTo, int yTo) {
-                if (dragDone) { // Início de um novo movimento de swipe
+                if (dragDone) {
                     dragDone = false;
                     xStart = xFrom;
                     yStart = yFrom;
@@ -84,12 +97,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
 
+            /**
+             * Listener for swipe end events. If this is called it means the swipe was completed successfully.
+             * Based on the direction of the swipe will send a new direction to the game.
+             * Since most swipes aren't straight vertical or horizontal the code will detect which axis has the greater delta and calculate direction based on that.
+             * @param x x coordinate of last destination of drag
+             * @param y y coordinate of last destination of drag
+             */
             @Override
-            public void onDragEnd(int x, int y) { // Só é chamado quando onDrag retorna true
+            public void onDragEnd(int x, int y) {
                 dragDone = true;
                 int xDiff, yDiff;
-                Dir dir = null;
+                Dir dir;
 
+                // Compute difference in X and Y axes to determine which has the greater change.
                 xDiff = Math.abs(x - xStart);
                 yDiff = Math.abs(y - yStart);
 
@@ -100,21 +121,23 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 level.setSnakeDirection(dir);
-
                 Log.v("Snake", "onDragEnd: (" + x + "," + y + ") ");
             }
 
+            /**
+             * This listener is called when the user swipes to an illegal position (outside the play area) and cancels the motion.
+             */
             @Override
-            public void onDragCancel() { // Quando o user arrasta para fora da tela
+            public void onDragCancel() {
                 dragDone = true;
                 Log.v("Snake", "onDragCancel");
             }
         });
 
+        // Block for restoring the current instance, if any
         if (savedInstanceState != null){
             model = (Game) savedInstanceState.getSerializable("game");
             level = (Level) savedInstanceState.getSerializable("level");
-            updater = new Updater();
 
             model.setListener(updater);
             level.setObserver(updater);
@@ -123,22 +146,28 @@ public class MainActivity extends AppCompatActivity {
             paused = savedInstanceState.getBoolean("paused");
             wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
 
-            createLevelGraphics(level.getHeight(), level.getWidth());
+            setupGameView(level.getHeight(), level.getWidth());
         }
-        else
+        else // If no instances then load the level
             this.loadNextLevel();
     }
 
-
+    /**
+     * Updates the game boards with current level and game state information.
+     */
     private void updateBoards(){
         levelNumberView.setText(Integer.toString(level.getNumber()));
         applesNumberView.setText(Integer.toString(level.getRemainingApples()));
         scoreNumberView.setText(Integer.toString(model.getScore()));
     }
 
-    private void createLevelGraphics(int height, int width){
-        level.setObserver(updater);                                     // Set listener of level
-        view.setSize(width, height);
+    /**
+     * Initial setup for the game view painting all of the tiles in the current level.
+     * @param height
+     * @param width
+     */
+    private void setupGameView(int height, int width){
+        view.setSize(width, height);            // Set view dimensions
 
         for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
             for (int c = 0; c < width; ++c) {
@@ -146,28 +175,30 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // Create listener for game beats/turns
         view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
             @Override
             public void onBeat(long beat, long time) {
-                if (!paused) {
-
-                    if (level.isFinished()) {
-                        if (!level.snakeIsDead()) {
+                if (!paused) { // Don't run if paused
+                    if (level.isFinished()) { // If game is over
+                        if (!level.snakeIsDead()) { // Player beat the level
                             Toast.makeText(getApplicationContext(), getString(R.string.beat_level)
                                     + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
                             wonLevelGame = true;
                             displayNextLevelButton();
                         }
-                        else
+                        else // Player lost
                             finishGame();
-                    } else {
+                    } else // Keep playing
                         level.step();
-                    }
                 }
             }
         });
     }
 
+    /**
+     * Loads the next level from file and sets up the game view panel.
+     */
     private void loadNextLevel() {
         try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
             if (model == null) {
@@ -176,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
             }
             level = model.loadNextLevel(file);
 
-            if (level == null) {
+            if (level == null) { // No more levels on file
                 finishGame();
                 return;
             }
@@ -186,11 +217,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int height = level.getHeight(), width = level.getWidth();
-
-        createLevelGraphics(height, width);
-        updateBoards();
+        level.setObserver(updater);                                     // Set listener of level
+        setupGameView(height, width);                                   // Set up the game view panel
+        updateBoards();                                                 // Update score\level\apple boards
     }
 
+    /**
+     * Displays and configures the button to switch between levels.
+     */
     private void displayNextLevelButton() {
         view.removeHeartbeatListener();
         okButton.setVisibility(View.VISIBLE);
@@ -207,7 +241,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * Loads the victory or defeat activity based on game state and closes the app.
+     */
     private void finishGame() {
         view.removeHeartbeatListener();
         Intent intent;
@@ -218,7 +254,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(MainActivity.this, DefeatActivity.class);
         }
 
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
 
@@ -227,7 +262,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Listener of model (Game and Level) to update View
      */
-    private class Updater implements Game.Listener, Level.Observer, Serializable {
+    private class Updater implements Game.Listener, Level.Observer {
         @Override
         public void scoreUpdated(int score) {
             scoreNumberView.setText(Integer.toString(model.getScore()));
@@ -254,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
         public void cellMoved(int fromL, int fromC, int toL, int toC, Cell cell) {
             Tile tile = view.getTile(fromC, fromL);
             assert !(tile instanceof EmptyTile);
-            view.setTile(toC, toL, tile); // TODO: atenção que estas funções do prof esperam receber X, Y e se dermos L,C fica ao contrário!!!!
+            view.setTile(toC, toL, tile);
             view.invalidate(toC, toL);
             cellRemoved(fromL, fromC);
         }
@@ -265,12 +300,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Pause the game when the activity stops
+     */
     @Override
     protected void onStop() {
         super.onStop();
         paused = true;
     }
 
+    /**
+     * Unpause the game when activity resumes and updated boards.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -278,6 +319,10 @@ public class MainActivity extends AppCompatActivity {
         updateBoards();
     }
 
+    /**
+     * Save the current game state.
+     * @param outState Bundle containing relevant information for the current game state.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -291,6 +336,31 @@ public class MainActivity extends AppCompatActivity {
         view.removeHeartbeatListener();
     }
 
-    private Updater updater = new Updater();
+    /**
+     * Listener for back button presses. Confirm if the user wants to exit the game.
+     */
+    @Override
+    public void onBackPressed() {
+        paused = true;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(R.string.back_button_text_title);
+        builder.setMessage(R.string.back_button_text_message);
+        builder.setPositiveButton(R.string.back_button_text_confirm,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.super.onBackPressed();
+                    }
+                });
+        builder.setNegativeButton(R.string.back_button_text_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                paused = false;
+            }
+        });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }

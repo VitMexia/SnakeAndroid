@@ -87,10 +87,9 @@ public class Level implements Serializable {
             deadSnake.move(stepCount, mapHolder);
         }
 
-        playerSize = playerHead.getSnakeSize(); // TODO: vitor, encapsulado (encapsular)
+        playerSize = playerHead.getSnakeSize();
         playerHead.move(stepCount++, mapHolder);
         checkMeal(playerHead, mapHolder); // checks what the player ate and acts accordingly
-        // TODO: vitor: e lida. Aki é o nivel que verifica o que foi comido para saber o que fazer (adicionar score, apples, etc) (cada snake é que deveria lidar com o que comeu, no?)
 
         if (appleCount == 0 || playerHead.isDead) {
             finish = true;
@@ -183,7 +182,9 @@ public class Level implements Serializable {
         initBehaviour();
     }
 
-    //initializes the listener list and implements the Cell StateChangeListener interface
+    /**
+     * initializes the listener list and implements the Cell StateChangeListener interface
+     */
     private void initBehaviour() {
 
         Cell.StateChangeListener listener = new MovingCells.StateChangeListener() {

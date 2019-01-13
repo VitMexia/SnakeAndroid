@@ -4,9 +4,13 @@
     <string name="apples_label">Apples</string>
     <string name="level_label">Level</string>
     <string name="level_finished">Level finished! Load next level?</string>
-    <string name="victory_text">VICTORY!</string>
+    <string name="victory_text">VICTORY</string>
     <string name="closeButtonText">Close</string>
     <string name="beat_level">You\'ve Beaten Level</string>
-    <string name="defeat_text">You are dead!!</string>
+    <string name="defeat_text">You lost</string>
+    <string name="back_button_text_title">Confirm</string>
+    <string name="back_button_text_message">Do you want to quit the game?</string>
+    <string name="back_button_text_confirm">Yes</string>
+    <string name="back_button_text_cancel">No</string>
 
 </resources>
