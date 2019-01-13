@@ -46,7 +46,7 @@ public abstract class MovingCells extends Cell {
     }
 
     //abstract methods and interfaces
-    public abstract void doYourThing(int stepCount, MapHolder mapHolder);
+    public abstract void move(int stepCount, MapHolder mapHolder);
 
 
 }

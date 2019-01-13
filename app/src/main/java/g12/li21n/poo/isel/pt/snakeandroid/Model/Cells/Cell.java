@@ -1,5 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid.Model.Cells;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.MapHolder;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Position;
 
 
-public abstract class Cell {
+public abstract class Cell implements Serializable {
 
 
     private Position position;

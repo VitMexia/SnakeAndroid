@@ -1,5 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid.Model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.AppleCell;
@@ -8,9 +9,8 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.DeadCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
-import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
 
-public class Level {
+public class Level implements Serializable {
 
     private int levelNumber, appleCount, startApples;
 
@@ -19,7 +19,6 @@ public class Level {
     private LinkedList<MovingCells> otherPlayers;
     private LinkedList<MovingCells> deadSnakes;
     private SnakeCells playerHead;
-    private int playerSize;
     private Game game;
     private boolean finish;
     private Observer updater;
@@ -29,7 +28,7 @@ public class Level {
 
         this.levelNumber = levelNumber;
         this.mapHolder = new MapHolder(new Cell[height][width]);
-        this.appleCount = 1;//TODO: Correct to 10
+        this.appleCount = 10;//TODO: Correct to 10
         this.otherPlayers = new LinkedList<>();
         this.deadSnakes = new LinkedList<>();
     }
@@ -74,7 +73,7 @@ public class Level {
                 //otherPlayers.remove(others);
             }
             else
-                others.doYourThing(stepCount, mapHolder);
+                others.move(stepCount, mapHolder);
 
             if (others instanceof SnakeCells) {
                 if (((SnakeCells) others).meal instanceof AppleCell) {
@@ -84,11 +83,10 @@ public class Level {
         }
 
         for (MovingCells deadSnake : deadSnakes) {
-            deadSnake.doYourThing(stepCount, mapHolder);
+            deadSnake.move(stepCount, mapHolder);
         }
 
-        playerSize = playerHead.snakeSize; // TODO: encapsular
-        playerHead.doYourThing(stepCount++, mapHolder);
+        playerHead.move(stepCount++, mapHolder);
         checkMeal(playerHead, mapHolder); // checks what the player ate and acts accordingly
         // TODO: cada snake é que deveria lidar com o que comeu, no?
 
@@ -96,11 +94,6 @@ public class Level {
             finish = true;
             return;
         }
-
-//        if (playerHead.isDead) {
-//            finish = true;
-//            return;
-//        }
 
         if (stepCount % 10 == 0 && stepCount > 0) {
             game.addScore(-1);

@@ -1,6 +1,8 @@
 package g12.li21n.poo.isel.pt.snakeandroid.Model;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
 
     private int col;
     private int line;

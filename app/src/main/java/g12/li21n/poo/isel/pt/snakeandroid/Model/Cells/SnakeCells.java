@@ -37,8 +37,7 @@ public class SnakeCells extends MovingCells {
 
     //sets the new positions for the player and other snakes
     @Override
-    public void doYourThing(int stepCount, MapHolder mapHolder) {
-//TODO: mudar isto para um nome mais explícito (move, moveTo etc)
+    public void move(int stepCount, MapHolder mapHolder) {
         this.mapHolder = mapHolder;
 
         Position oldPos = getPosition();
@@ -49,7 +48,7 @@ public class SnakeCells extends MovingCells {
         if (!isBad) {
             if (stepCount % 10 == 0 && stepCount != 0 && bodyList.size() > 0) {
                 removeCell(bodyList.removeLast().getPosition());
-                snakeSize -= 1;
+                snakeSize--;
             } else if (stepCount % 10 == 0 && stepCount != 0 && bodyList.size() == 0) {
                 killSnake();
                 return;
@@ -101,7 +100,6 @@ public class SnakeCells extends MovingCells {
         if (cell == null) return;
 
         if (cell instanceof AppleCell) {
-
             removeCell(cell.getPosition());
             meal = cell;
             bodyToAdd += 4;

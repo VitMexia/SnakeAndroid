@@ -1,5 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid.Model;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -9,7 +10,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 
 
-public class MapHolder {
+public class MapHolder implements Serializable {
 
     private final Cell[][] cellMap;
     private final int height;

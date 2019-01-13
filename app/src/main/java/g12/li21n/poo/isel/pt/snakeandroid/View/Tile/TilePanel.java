@@ -16,6 +16,8 @@ import android.widget.Toast;
  * Este import deve ser adaptado para usar a classe R do projeto
  * import pt.isel.poo.<package>.R;
  */
+import java.io.Serializable;
+
 import g12.li21n.poo.isel.pt.snakeandroid.R;
 
 /**
@@ -25,7 +27,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.R;
  * @author Palex
  * @see Tile
  */
-public class TilePanel extends View {
+public class TilePanel extends View implements  Serializable{
 
 	private int wTiles=-1, hTiles=-1;   // Panel dimensions in tiles.
 

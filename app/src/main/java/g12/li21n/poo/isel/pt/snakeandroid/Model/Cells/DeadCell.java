@@ -16,7 +16,7 @@ public class DeadCell extends MovingCells {
     }
 
     @Override
-    public void doYourThing(int stepCount, MapHolder mapHolder) {
+    public void move(int stepCount, MapHolder mapHolder) {
 
         if (bodyList.size() > 0)
             removeCell(bodyList.removeLast().getPosition());

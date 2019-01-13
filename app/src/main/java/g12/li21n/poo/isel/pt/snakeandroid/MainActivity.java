@@ -1,5 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
@@ -29,9 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     //private static final String LEVELS_FILE = "levels.txt";
     private static int LEVELS_FILE = R.raw.levels;          // Name of levels file
-    private  TextView  levelNumberView;
-    private  TextView applesNumberView;
-    private  TextView  scoreNumberView;
+    private TextView levelNumberView;
+    private TextView applesNumberView;
+    private TextView scoreNumberView;
     private Game model;                                     // Model of game
     private Level level;                                    // Model of current level
     private TilePanel view;
@@ -41,14 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
     //private TileView tView;
     private static final int STEP_TIME = 500;               // Milliseconds by step
-    private boolean escaped = false;
     private boolean paused = false;
     private boolean dragDone = true;
     private int xStart, yStart;
-    private int finalSteps = 2;
-
     private boolean wonLevelGame;
-
 
 
     @Override
@@ -67,6 +65,24 @@ public class MainActivity extends AppCompatActivity {
         okButton.setVisibility(View.GONE);
         userInfo.setVisibility(View.GONE);
 
+        if (savedInstanceState != null){
+            model = (Game) savedInstanceState.getSerializable("game");
+            level = (Level) savedInstanceState.getSerializable("level");
+            updater = (Updater) savedInstanceState.getSerializable("updater");
+            view = (TilePanel) savedInstanceState.getSerializable("view");
+
+            model.setListener(updater);
+            level.setObserver(updater);
+            view.invalidate();
+
+            dragDone = savedInstanceState.getBoolean("dragDone");
+            paused = savedInstanceState.getBoolean("paused");
+            wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
+
+            createLevelGraphics(level.getHeight(), level.getWidth());
+            return;
+        }
+
         view.setListener(new OnTileTouchListener() {
             @Override
             public boolean onClick(int xTile, int yTile) {
@@ -76,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onDrag(int xFrom, int yFrom, int xTo, int yTo) {
-                if (dragDone){ // Início de um novo movimento de swipe
+                if (dragDone) { // Início de um novo movimento de swipe
                     dragDone = false;
                     xStart = xFrom;
                     yStart = yFrom;
@@ -95,10 +111,9 @@ public class MainActivity extends AppCompatActivity {
                 xDiff = Math.abs(x - xStart);
                 yDiff = Math.abs(y - yStart);
 
-                if (xDiff > yDiff){
+                if (xDiff > yDiff) {
                     dir = x > xStart ? Dir.RIGHT : Dir.LEFT;
-                }
-                else {
+                } else {
                     dir = y > yStart ? Dir.DOWN : Dir.UP;
                 }
 
@@ -114,14 +129,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        this.loadNextLevel(this);
+
+
+        this.loadNextLevel();
     }
 
 
-    private void loadNextLevel(final MainActivity mainActivity) {
+    private void updateBoards(){
+        levelNumberView.setText(Integer.toString(level.getNumber()));
+        applesNumberView.setText(Integer.toString(level.getRemainingApples()));
+        scoreNumberView.setText(Integer.toString(model.getScore()));
+    }
 
+    private void createLevelGraphics(int height, int width){
+        view.setSize(width, height);
+        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
+            for (int c = 0; c < width; ++c) {
+                view.setTile(c, l, CellTile.tileOf(this.context, level.getCell(l, c)));
+            }
+        }
+
+        view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
+            @Override
+            public void onBeat(long beat, long time) {
+                if (!paused) {
+
+                    if (level.isFinished()) {
+                        if (!level.snakeIsDead()) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.beat_level)
+                                    + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
+                            wonLevelGame = true;
+                            displayNextLevelButton();
+                        }
+                        else
+                            finishGame();
+                    } else {
+                        level.step();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadNextLevel() {
         try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
-            if (model == null){
+            if (model == null) {
                 model = new Game(file);                                 // Create game model
                 model.setListener(updater);                             // Set listener of game
             }
@@ -132,60 +184,18 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             wonLevelGame = false;
-        }
-        catch (IOException | Loader.LevelFormatException e){
+        } catch (IOException | Loader.LevelFormatException e) {
             Log.e("Snake", "Error loading level.", e);
         }
 
         int height = level.getHeight(), width = level.getWidth();
-
-        //view = findViewById(R.id.panel);// Create view for cells
-        view.setSize(width, height);
         level.setObserver(updater);                                     // Set listener of level
 
-        levelNumberView.setText(Integer.toString(level.getNumber()));
-        applesNumberView.setText(Integer.toString(level.getRemainingApples()));
-        scoreNumberView.setText(Integer.toString(model.getScore()));
-
-        for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
-            for (int c = 0; c < width; ++c) {
-                view.setTile(c,l, CellTile.tileOf(mainActivity, level.getCell(l, c)));
-            }
-        }
-
-        view.setHeartbeatListener(STEP_TIME, new OnBeatListener() {
-            @Override
-            public void onBeat(long beat, long time) {
-                if (!paused){
-
-                    if (level.isFinished()) {
-
-                        if(!level.snakeIsDead())
-                        {
-                            Toast.makeText(mainActivity, getString(R.string.beat_level)
-                                    + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
-                            wonLevelGame = true;
-                            displayNextLevelButton(mainActivity);
-                        }else if(finalSteps <=0){
-
-                            finishGame();
-                        }
-                        else{
-                            finalSteps -=1; //run 2 steps after  snake is dead
-                        }
-                    }
-                    else{
-
-                        level.step();
-
-                    }
-                }
-            }
-        });
-
+        createLevelGraphics(height, width);
+        updateBoards();
     }
 
-    private void displayNextLevelButton(final MainActivity activity){
+    private void displayNextLevelButton() {
         view.removeHeartbeatListener();
         okButton.setVisibility(View.VISIBLE);
         userInfo.setVisibility(View.VISIBLE);
@@ -194,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadNextLevel(activity);
+                loadNextLevel();
                 okButton.setVisibility(View.GONE);
                 userInfo.setVisibility(View.GONE);
             }
@@ -202,15 +212,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void finishGame(){
-
+    private void finishGame() {
         view.removeHeartbeatListener();
         Intent intent;
 
-        if(wonLevelGame) {
-             intent  = new Intent(MainActivity.this, VictoryActivity.class);
-        }else{
-             intent  = new Intent(MainActivity.this, DefeatActivity.class);
+        if (wonLevelGame) {
+            intent = new Intent(MainActivity.this, VictoryActivity.class);
+        } else {
+            intent = new Intent(MainActivity.this, DefeatActivity.class);
         }
 
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -222,36 +231,72 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Listener of model (Game and Level) to update View
      */
-    private class Updater implements Game.Listener, Level.Observer {
+    private class Updater implements Game.Listener, Level.Observer, Serializable {
         @Override
         public void scoreUpdated(int score) {
             scoreNumberView.setText(Integer.toString(model.getScore()));
         }
+
         @Override
         public void cellUpdated(int l, int c, Cell cell) {
-            view.invalidate(view.getTile(c,l));
-            view.getTile(c,l).setSelect(true);
+            view.invalidate(view.getTile(c, l));
+            view.getTile(c, l).setSelect(true);
         }
+
         @Override
         public void cellCreated(int l, int c, Cell cell) {
-            view.setTile(c,l,CellTile.tileOf( context,cell));
-            view.invalidate(c,l);
+            view.setTile(c, l, CellTile.tileOf(context, cell));
+            view.invalidate(c, l);
         }
+
         @Override
-        public void cellRemoved(int l, int c) { view.setTile(c,l,new EmptyTile()); }
+        public void cellRemoved(int l, int c) {
+            view.setTile(c, l, new EmptyTile());
+        }
+
         @Override
         public void cellMoved(int fromL, int fromC, int toL, int toC, Cell cell) {
-            Tile tile = view.getTile(fromC,fromL);
+            Tile tile = view.getTile(fromC, fromL);
             assert !(tile instanceof EmptyTile);
-            view.setTile(toC,toL,tile); // TODO: atenção que estas funções do prof esperam receber X, Y e se dermos L,C fica ao contrário!!!!
+            view.setTile(toC, toL, tile); // TODO: atenção que estas funções do prof esperam receber X, Y e se dermos L,C fica ao contrário!!!!
             view.invalidate(toC, toL);
-            cellRemoved(fromL,fromC);
+            cellRemoved(fromL, fromC);
         }
+
         @Override
         public void applesUpdated(int apples) {
             applesNumberView.setText(Integer.toString(apples));
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        paused = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        paused = false;
+        updateBoards();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("game", model);
+        outState.putSerializable("level", level);
+        outState.putSerializable("updater", updater);
+        outState.putSerializable("view", view);
+
+        outState.putBoolean("dragDone", dragDone);
+        outState.putBoolean("paused", paused);
+        outState.putBoolean("wonLevelGame", wonLevelGame);
+
+        view.removeHeartbeatListener();
+    }
+
     private Updater updater = new Updater();
 
 }

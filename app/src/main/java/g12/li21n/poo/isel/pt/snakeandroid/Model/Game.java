@@ -3,9 +3,10 @@ package g12.li21n.poo.isel.pt.snakeandroid.Model;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements Serializable {
     private final InputStream input;
     private int score = 0;
     private int levelNumber = 0;
