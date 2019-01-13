@@ -80,11 +80,11 @@ public class SnakeCells extends MovingCells {
 
                 newPos = mapHolder.getRandomAvailablePosition(availablePos);
 
-                Dir newdir = mapHolder.getDirection(newPos, this.getPosition());
+                Dir newDir = mapHolder.getDirection(newPos, this.getPosition());
 
 
-                if (newdir != null) {
-                    setDirection(newdir);
+                if (newDir != null) {
+                    setDirection(newDir);
                 } else {
                     killSnake();
                     return;
