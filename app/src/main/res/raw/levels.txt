@@ -57,7 +57,7 @@ X                X      X
 X                X      X
 X   *            X      X
 X          X            X
-X    A     X  A         X
+X    A     X            X
 X          X            X
 X          X  @        MX
 XXXXXXXXXXXXXXXXXXXX XXXX

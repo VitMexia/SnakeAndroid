@@ -1,6 +1,7 @@
 package g12.li21n.poo.isel.pt.snakeandroid.Model.Cells;
 
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.MapHolder;
@@ -19,7 +20,7 @@ public class AppleCell extends Cell {
     }
 
     private Position getNewPosition() {
-        LinkedList<Position> freePosList = mapHolder.getEmptyPositions();
+        ArrayList<Position> freePosList = mapHolder.getEmptyPositions();
         return mapHolder.getRandomAvailablePosition(freePosList);
     }
 
