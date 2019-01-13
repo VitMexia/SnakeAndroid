@@ -27,7 +27,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.R;
  * @author Palex
  * @see Tile
  */
-public class TilePanel extends View implements  Serializable{
+public class TilePanel extends View {
 
 	private int wTiles=-1, hTiles=-1;   // Panel dimensions in tiles.
 

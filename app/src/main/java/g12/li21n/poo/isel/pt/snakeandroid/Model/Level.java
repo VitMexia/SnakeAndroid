@@ -19,6 +19,7 @@ public class Level implements Serializable {
     private LinkedList<MovingCells> otherPlayers;
     private LinkedList<MovingCells> deadSnakes;
     private SnakeCells playerHead;
+    private int playerSize;
     private Game game;
     private boolean finish;
     private Observer updater;
@@ -76,7 +77,7 @@ public class Level implements Serializable {
                 others.move(stepCount, mapHolder);
 
             if (others instanceof SnakeCells) {
-                if (((SnakeCells) others).meal instanceof AppleCell) {
+                if (((SnakeCells) others).getMeal() instanceof AppleCell) {
                     checkMeal(others, mapHolder); //if snake ate apple, a new apple will be generated
                 }
             }
@@ -86,9 +87,10 @@ public class Level implements Serializable {
             deadSnake.move(stepCount, mapHolder);
         }
 
+        playerSize = playerHead.getSnakeSize(); // TODO: vitor, encapsulado (encapsular)
         playerHead.move(stepCount++, mapHolder);
         checkMeal(playerHead, mapHolder); // checks what the player ate and acts accordingly
-        // TODO: cada snake é que deveria lidar com o que comeu, no?
+        // TODO: vitor: e lida. Aki é o nivel que verifica o que foi comido para saber o que fazer (adicionar score, apples, etc) (cada snake é que deveria lidar com o que comeu, no?)
 
         if (appleCount == 0 || playerHead.isDead) {
             finish = true;
@@ -106,22 +108,22 @@ public class Level implements Serializable {
 
         this.mapHolder = mapHolder;
 
-        if (((SnakeCells) cell).meal instanceof AppleCell) {
-            if (!((SnakeCells) cell).isBad) {
+        if (((SnakeCells) cell).getMeal() instanceof AppleCell) {
+            if (!((SnakeCells) cell).isBad()) {
                 appleCount -= 1;
                 game.addScore(4);
                 updater.applesUpdated(appleCount);
             }
             AddApples(cell);
-        } else if (((SnakeCells) cell).meal instanceof MouseCell) {
+        } else if (((SnakeCells) cell).getMeal() instanceof MouseCell) {
 
-            if (!((SnakeCells) cell).isBad) {
+            if (!((SnakeCells) cell).isBad()) {
                 game.addScore(10);
             }
-        } else if (((SnakeCells) cell).meal instanceof DeadCell) {
+        } else if (((SnakeCells) cell).getMeal() instanceof DeadCell) {
 
-            if (!((SnakeCells) cell).isBad) {
-                game.addScore(10 + 2 * ((DeadCell) ((SnakeCells) cell).meal).getSize());
+            if (!((SnakeCells) cell).isBad()) {
+                game.addScore(10 + 2 * ((DeadCell) ((SnakeCells) cell).getMeal()).getSize());
             }
         }
     }
@@ -129,7 +131,7 @@ public class Level implements Serializable {
     //Requests Cell Class to generate an apple on a free position
     private void AddApples(MovingCells cell) {
 
-        if (appleCount >= startApples || ((SnakeCells) cell).isBad) {
+        if (appleCount >= startApples || ((SnakeCells) cell).isBad()) {
             Cell apple = Cell.getApple(mapHolder);
             updater.cellCreated(apple.getPosition().getLine(), apple.getPosition().getCol(), apple);
             mapHolder.setCellAt(apple, apple.getPosition());
@@ -147,9 +149,9 @@ public class Level implements Serializable {
     //it also sets the start apples quantity
     public void putCell(int l, int c, Cell cell) {
 
-        if (cell instanceof SnakeCells && !((SnakeCells) cell).isBad) {
+        if (cell instanceof SnakeCells && !((SnakeCells) cell).isBad()) {
             playerHead = (SnakeCells) cell;
-        } else if (cell instanceof SnakeCells && ((SnakeCells) cell).isBad) {
+        } else if (cell instanceof SnakeCells && ((SnakeCells) cell).isBad()) {
 
             otherPlayers.add((MovingCells) cell);
         } else if (cell instanceof AppleCell) {

@@ -65,24 +65,6 @@ public class MainActivity extends AppCompatActivity {
         okButton.setVisibility(View.GONE);
         userInfo.setVisibility(View.GONE);
 
-        if (savedInstanceState != null){
-            model = (Game) savedInstanceState.getSerializable("game");
-            level = (Level) savedInstanceState.getSerializable("level");
-            updater = (Updater) savedInstanceState.getSerializable("updater");
-            view = (TilePanel) savedInstanceState.getSerializable("view");
-
-            model.setListener(updater);
-            level.setObserver(updater);
-            view.invalidate();
-
-            dragDone = savedInstanceState.getBoolean("dragDone");
-            paused = savedInstanceState.getBoolean("paused");
-            wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
-
-            createLevelGraphics(level.getHeight(), level.getWidth());
-            return;
-        }
-
         view.setListener(new OnTileTouchListener() {
             @Override
             public boolean onClick(int xTile, int yTile) {
@@ -129,9 +111,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if (savedInstanceState != null){
+            model = (Game) savedInstanceState.getSerializable("game");
+            level = (Level) savedInstanceState.getSerializable("level");
+            updater = new Updater();
 
+            model.setListener(updater);
+            level.setObserver(updater);
 
-        this.loadNextLevel();
+            dragDone = savedInstanceState.getBoolean("dragDone");
+            paused = savedInstanceState.getBoolean("paused");
+            wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
+
+            createLevelGraphics(level.getHeight(), level.getWidth());
+        }
+        else
+            this.loadNextLevel();
     }
 
 
@@ -142,7 +137,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createLevelGraphics(int height, int width){
+        level.setObserver(updater);                                     // Set listener of level
         view.setSize(width, height);
+
         for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
             for (int c = 0; c < width; ++c) {
                 view.setTile(c, l, CellTile.tileOf(this.context, level.getCell(l, c)));
@@ -189,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int height = level.getHeight(), width = level.getWidth();
-        level.setObserver(updater);                                     // Set listener of level
 
         createLevelGraphics(height, width);
         updateBoards();
@@ -287,8 +283,6 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putSerializable("game", model);
         outState.putSerializable("level", level);
-        outState.putSerializable("updater", updater);
-        outState.putSerializable("view", view);
 
         outState.putBoolean("dragDone", dragDone);
         outState.putBoolean("paused", paused);
