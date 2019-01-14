@@ -9,13 +9,12 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.MapHolder;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Position;
 
 
-public class SnakeCells extends MovingCells {
+public abstract class SnakeCells extends MovingCells {
 
     protected int bodyToAdd;
     private boolean justAte;
-    private boolean isBad;
     private Cell meal;
-    private int snakeSize;
+    protected int snakeSize;
 
     protected LinkedList<BodyCell> bodyList;
     protected static LinkedList<SnakeCells> snakes = new LinkedList();     //Static method to save each snake that can be accessed
@@ -26,77 +25,23 @@ public class SnakeCells extends MovingCells {
         bodyToAdd = 4;
         snakeSize = 1;
         bodyList = new LinkedList<>();
-        setDirection(Dir.UP);
         snakes.add(this);
-    }
-
-    public SnakeCells(boolean bad) {
-        this();
-        isBad = bad;
-        setDirection(null);
     }
 
     //sets the new positions for the player and other snakes
     @Override
     public void move(int stepCount, MapHolder mapHolder) {
-//TODO: vitor, DONE ( mudar isto para um nome mais explícito (move, moveTo etc))
         this.mapHolder = mapHolder;
 
         Position oldPos = getPosition();
         Position newPos = getNewPos();
 
-        // TODO: vitor, HELP?!?  isto tem que levar rework, o prof vai-se mandar aos arames com tanto if (e isto é complicado de ler para caraças)
+        if (newPos != null)
+            validateNewPos(newPos);
 
-        if (!isBad) {
-
-            if (stepCount % 10 == 0 && stepCount != 0 && bodyList.size() > 0) {
-                removeCell(bodyList.removeLast().getPosition());
-                snakeSize -= 1;
-            }
-            else if (stepCount % 10 == 0 && stepCount != 0 && bodyList.size() == 0) {
-                killSnake();
-                return;
-            }
-        }
-        else if (isDead) {
-
-            if (bodyList.size() > 0) removeCell(bodyList.removeLast().getPosition());
+        if (isDead)
             return;
-        }
-        else {
 
-            ArrayList<Position> availablePos = mapHolder.getNewAdjacentAvailablePosition(getPosition(), true);
-
-            boolean isFreePos = false;
-
-            for (Position pos : availablePos) {
-                if (newPos.equals(pos)) {
-                    isFreePos = true;
-                    break;
-                }
-            }
-
-            if (!isFreePos) {
-
-                newPos = mapHolder.getRandomAvailablePosition(availablePos);
-
-                Dir newDir = mapHolder.getDirection(newPos, this.getPosition());
-
-
-                if (newDir != null) {
-                    setDirection(newDir);
-                } else {
-                    killSnake();
-                    return;
-                }
-            }
-        }
-
-        validateNewPos(newPos);
-
-        if (isDead) {
-            return;
-        }
         setPosition(newPos);
         moveTo(oldPos, newPos);
         addMoveBody(oldPos);
@@ -106,13 +51,11 @@ public class SnakeCells extends MovingCells {
 
     //depending on what type of cell is on the new position addbody, kill snake
     private void validateNewPos(Position pos) {
-//TODO: vitor, HELP !?!?!  precisa rework, no mínimo tirar os instanceof/ifs, idealmente ter isto tudo em despacho dinâmico
         Cell cell = mapHolder.getCellAt(pos);
         meal = null;
         if (cell == null) return;
 
         if (cell instanceof AppleCell) {
-
             removeCell(cell.getPosition());
             meal = cell;
             bodyToAdd += 4;
@@ -132,7 +75,6 @@ public class SnakeCells extends MovingCells {
             killSnake();
             return;
         } else if (cell instanceof BodyCell) {
-
             boolean notMoved = false;
             for (SnakeCells snake : snakes) {
                 if (snake.equals(this)) {
@@ -155,7 +97,6 @@ public class SnakeCells extends MovingCells {
     //this class defines how the body of the snake moves. a cell is created where the head was and if there are no bodies to add
     //the last body is removed
     private void addMoveBody(Position pos) {
-
         BodyCell bc = new BodyCell();
         bc.setPosition(pos);
         createCell(bc);
@@ -166,70 +107,27 @@ public class SnakeCells extends MovingCells {
                 removeCell(bodyList.removeLast().getPosition());
             }
         } else if (!justAte) {
-            bodyToAdd -= 1;
-            snakeSize += 1;
+            bodyToAdd--;
+            snakeSize++;
         }
 
         justAte = false;
     }
 
     //get new position generates the next position based on the current direction or newly generated direction if non available
-    private Position getNewPos() {
-
-        if (isBad && getPosition() != null && getDirection() == null)
-            setDirection(mapHolder.getDirection(mapHolder.getRandomAvailablePosition(mapHolder.getNewAdjacentAvailablePosition(getPosition(), true)), this.getPosition()));
-
-       //setDirection(provideInitialDirection());
-
+    protected Position getNewPos() {
         return new Position(getPosition().getLine() + getDirection().line, getPosition().getCol() + getDirection().column);
     }
-
-    //Provides a random  generated direction when the game starts to each one of the bad snakes
-//    private Dir provideInitialDirection() {
-//        Position pos = mapHolder.getRandomAvailablePosition(mapHolder.getNewAdjacentAvailablePosition(getPosition(), true));
-//
-//        if (getDirection() == null && pos != null) {
-//            return getDirection(pos);
-//        }
-//        return null;
-//    }
-
-//    private Dir getDirection(Position pos) {
-//// TODO: vitor, can't! ainda assim movi isto para o MapHolder (meter o getRandom.. a devolver logo a direção em vez de estar a dar esta volta toda?)
-//        int l = pos.getLine() - getPosition().getLine();
-//        int c = pos.getCol() - getPosition().getCol();
-//
-//        if (l == 0) {
-//            if (c == 1) {
-//                return Dir.RIGHT;
-//            } else {
-//                {
-//                    return Dir.LEFT;
-//                }
-//            }
-//        } else {
-//            if (l == 1) {
-//                return Dir.DOWN;
-//            } else {
-//                return Dir.UP;
-//            }
-//        }
-//    }
 
     //set the properties of a deadsnake and creates an instance of a DeadCel. Also removes all the body cells of the snake when bad
     public void killSnake() {
         isDead = true;
         DeadCell dc = new DeadCell();
-        dc.isBad = this.isBad;
         dc.bodyList = this.bodyList;
         dc.setPosition(this.getPosition());
 
         removeCell(this.getPosition());
         createCell(dc);
-    }
-
-    public boolean isBad() {
-        return isBad;
     }
 
     public Cell getMeal() {

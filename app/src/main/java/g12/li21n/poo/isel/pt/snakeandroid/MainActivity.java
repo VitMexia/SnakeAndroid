@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
      * Loads the next level from file and sets up the game view panel.
      */
     private void loadNextLevel() {
-        try (InputStream file = getResources().openRawResource(LEVELS_FILE)) { // Open description file
+        try (InputStream file = getResources().openRawResource(R.raw.levels_2)) { // Open description file
             if (model == null) {
                 model = new Game(file);                                 // Create game model
                 model.setListener(updater);                             // Set listener of game

@@ -12,6 +12,9 @@ public class Position implements Serializable {
         this.line = line;
     }
 
+    public Position(){
+    }
+
     public int getCol() {
         return col;
     }

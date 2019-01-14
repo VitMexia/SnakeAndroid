@@ -8,7 +8,9 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.AppleCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.BodyCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.DeadCell;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.EnemySnakeCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.PlayerCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.WallCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
@@ -38,28 +40,36 @@ public abstract class CellTile implements Tile  {
         if(cell == null){
             return new EmptyTile();
         }
-        else if(cell instanceof SnakeCells && !((SnakeCells)cell).isBad()){
+
+        if(cell instanceof PlayerCell){
             return new HeadTile();
         }
-        else if(cell instanceof DeadCell && !((DeadCell)cell).isBad){
+
+        if(cell instanceof DeadCell && !((DeadCell)cell).isBad){
             return new DeadTile();
         }
-        else if(cell instanceof BodyCell){
+
+        if(cell instanceof BodyCell){
             return new BodyTile();
         }
-        else if(cell instanceof AppleCell){
+
+        if(cell instanceof AppleCell){
             return new AppleTile(context);
         }
-        else if(cell instanceof WallCell){
+
+        if(cell instanceof WallCell){
             return new WallTile(context);
         }
-        else if(cell instanceof MouseCell){
+
+        if(cell instanceof MouseCell){
             return new MouseTile(context);
         }
-        else if(cell instanceof SnakeCells && ((SnakeCells)cell).isBad()){
+
+        if(cell instanceof EnemySnakeCell){
             return new BadSnakeTile();
         }
-        else if(cell instanceof DeadCell && ((DeadCell)cell).isBad){
+
+        if(cell instanceof DeadCell && ((DeadCell)cell).isBad){
             return new BadDeadTile();
         }
         return null;

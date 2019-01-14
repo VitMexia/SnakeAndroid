@@ -40,7 +40,7 @@ public abstract class Cell implements Serializable {
 
         switch (type) {
             case '@':
-                return new SnakeCells();
+                return new PlayerCell();
             case 'A':
                 return new AppleCell();
             case 'X':
@@ -50,7 +50,7 @@ public abstract class Cell implements Serializable {
             case 'M':
                 return new MouseCell();
             case '*':
-                return new SnakeCells(true);
+                return new EnemySnakeCell();
             default:
                 return null;
         }

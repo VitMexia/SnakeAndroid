@@ -6,8 +6,10 @@ import java.util.LinkedList;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.AppleCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.DeadCell;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.EnemySnakeCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MouseCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.PlayerCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 
 public class Level implements Serializable {
@@ -18,7 +20,7 @@ public class Level implements Serializable {
 
     private LinkedList<MovingCells> otherPlayers;
     private LinkedList<MovingCells> deadSnakes;
-    private SnakeCells playerHead;
+    private PlayerCell playerHead;
     private int playerSize;
     private Game game;
     private boolean finish;
@@ -72,8 +74,8 @@ public class Level implements Serializable {
         for (MovingCells others : otherPlayers) {
             if (others.isDead && others instanceof MouseCell) {
                 //otherPlayers.remove(others);
-            }
-            else
+                // TODO: isto é suposto estar comentado ?
+            } else
                 others.move(stepCount, mapHolder);
 
             if (others instanceof SnakeCells) {
@@ -108,20 +110,22 @@ public class Level implements Serializable {
         this.mapHolder = mapHolder;
 
         if (((SnakeCells) cell).getMeal() instanceof AppleCell) {
-            if (!((SnakeCells) cell).isBad()) {
-                appleCount -= 1;
+            if (cell == playerHead) {
                 game.addScore(4);
-                updater.applesUpdated(appleCount);
+                updater.applesUpdated(--appleCount);
             }
             AddApples(cell);
-        } else if (((SnakeCells) cell).getMeal() instanceof MouseCell) {
+        }
 
-            if (!((SnakeCells) cell).isBad()) {
+        if (((SnakeCells) cell).getMeal() instanceof MouseCell) {
+
+            if (cell == playerHead) {
                 game.addScore(10);
             }
-        } else if (((SnakeCells) cell).getMeal() instanceof DeadCell) {
+        }
 
-            if (!((SnakeCells) cell).isBad()) {
+        if (((SnakeCells) cell).getMeal() instanceof DeadCell) {
+            if (cell == playerHead) {
                 game.addScore(10 + 2 * ((DeadCell) ((SnakeCells) cell).getMeal()).getSize());
             }
         }
@@ -130,7 +134,7 @@ public class Level implements Serializable {
     //Requests Cell Class to generate an apple on a free position
     private void AddApples(MovingCells cell) {
 
-        if (appleCount >= startApples || ((SnakeCells) cell).isBad()) {
+        if (appleCount >= startApples || cell instanceof EnemySnakeCell) {
             Cell apple = Cell.getApple(mapHolder);
             updater.cellCreated(apple.getPosition().getLine(), apple.getPosition().getCol(), apple);
             mapHolder.setCellAt(apple, apple.getPosition());
@@ -140,7 +144,7 @@ public class Level implements Serializable {
     //sets the snake Direction based on user input
     public void setSnakeDirection(Dir dir) {
 //        if (!playerHead.getDirection().isOppositeOrSame(dir))
-            playerHead.setDirection(dir);
+        playerHead.setDirection(dir);
 
     }
 
@@ -148,20 +152,19 @@ public class Level implements Serializable {
     //it also sets the start apples quantity
     public void putCell(int l, int c, Cell cell) {
 
-        if (cell instanceof SnakeCells && !((SnakeCells) cell).isBad()) {
-            playerHead = (SnakeCells) cell;
-        } else if (cell instanceof SnakeCells && ((SnakeCells) cell).isBad()) {
-
-            otherPlayers.add((MovingCells) cell);
-        } else if (cell instanceof AppleCell) {
-            startApples++;
-        } else if (cell instanceof MouseCell) {
-            otherPlayers.add(0, (MovingCells) cell);
-        }
-
         cell.setPosition(l, c);
         mapHolder.setCellAt(cell, cell.getPosition());
 
+        if (cell instanceof PlayerCell) {
+            playerHead = (PlayerCell) cell;
+            return;
+        }
+
+        if (cell instanceof AppleCell)
+            startApples++;
+
+        if (cell instanceof MovingCells)
+            otherPlayers.add((MovingCells) cell);
     }
 
     public interface Observer {
