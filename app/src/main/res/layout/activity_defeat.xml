@@ -7,7 +7,7 @@
     tools:context=".VictoryActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/gameEndingImgId"
         android:layout_width="221dp"
         android:layout_height="230dp"
         android:layout_marginStart="8dp"
@@ -34,7 +34,7 @@
         android:textColor="@android:color/holo_red_dark"
         android:textSize="@dimen/victoryTextSize"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/gameEndingImgId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/defeat_text" />
@@ -53,5 +53,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/gameEndingImgId" />
 </android.support.constraint.ConstraintLayout>

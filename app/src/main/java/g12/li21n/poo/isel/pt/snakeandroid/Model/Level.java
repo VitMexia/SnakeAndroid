@@ -68,6 +68,9 @@ public class Level implements Serializable {
         return playerHead.isDead;
     }
 
+    /**
+     * Method to process one game turn/step/beat
+     */
     public void step() {
 
         //goes through the list of mouses and Bad Snakes and each one does its thing
@@ -104,7 +107,9 @@ public class Level implements Serializable {
 
     }
 
-    //checks was was eaten by each snake (player or BadASnake) and adds score and requests a new apple when required
+    /**
+     * Checks the last object eaten by each snake and updates score or apples as necessary
+     */
     private void checkMeal(MovingCells cell, MapHolder mapHolder) {
 
         this.mapHolder = mapHolder;

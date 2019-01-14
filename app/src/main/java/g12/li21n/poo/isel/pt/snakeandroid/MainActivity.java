@@ -51,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean wonLevelGame;
     private Updater updater;
 
-
+    /**
+     * Method called when creating the activity. Sets up the game and all it's required elements.
+     * @param savedInstanceState Instance state bundle when necessary (i.e. screen flips)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
         view.setListener(new OnTileTouchListener() {
             @Override
             public boolean onClick(int xTile, int yTile) {
-                Log.v("Snake", "onClick");
                 return false;
             }
 
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 level.setSnakeDirection(dir);
-                Log.v("Snake", "onDragEnd: (" + x + "," + y + ") ");
+                Log.v("Snake", "onDragEnd: (" + x + "," + y + ") -> Direction: " + dir);
             }
 
             /**
@@ -134,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Block for restoring the current instance, if any
+        // Block for restoring the current instance state, if any
         if (savedInstanceState != null){
             model = (Game) savedInstanceState.getSerializable("game");
             level = (Level) savedInstanceState.getSerializable("level");
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
      * Loads the next level from file and sets up the game view panel.
      */
     private void loadNextLevel() {
-        try (InputStream file = getResources().openRawResource(R.raw.levels_2)) { // Open description file
+        try (InputStream file = getResources().openRawResource(R.raw.levels)) { // Open description file
             if (model == null) {
                 model = new Game(file);                                 // Create game model
                 model.setListener(updater);                             // Set listener of game
