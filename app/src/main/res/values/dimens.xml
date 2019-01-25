@@ -4,4 +4,7 @@
     <dimen name="minUserInfoH">50dp</dimen>
     <dimen name="boardTextSize">15sp</dimen>
     <dimen name="victoryTextSize">40sp</dimen>
+    <dimen name="menu_button_width">320dp</dimen>
+    <dimen name="menu_button_height">60dp</dimen>
+    <dimen name="menu_button_text_size">30sp</dimen>
 </resources>

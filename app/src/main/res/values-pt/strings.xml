@@ -13,4 +13,6 @@
     <string name="back_button_text_message">Pretende sair do jogo?</string>
     <string name="back_button_text_confirm">Sim</string>
     <string name="back_button_text_cancel">Não</string>
+    <string name="menu_play_button_text">Jogar</string>
+    <string name="menu_score_button_text">Pontuações</string>
 </resources>

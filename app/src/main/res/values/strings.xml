@@ -12,5 +12,7 @@
     <string name="back_button_text_message">Do you want to quit the game?</string>
     <string name="back_button_text_confirm">Yes</string>
     <string name="back_button_text_cancel">No</string>
+    <string name="menu_play_button_text">Play</string>
+    <string name="menu_score_button_text">Scoreboard</string>
 
 </resources>
