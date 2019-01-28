@@ -20,9 +20,7 @@ public class VictoryActivity extends AppCompatActivity {
         closebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Goodbye!",Toast.LENGTH_SHORT).show();
                 finish();
-                //System.exit(0);
             }
         });
     }

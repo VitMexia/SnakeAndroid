@@ -15,4 +15,6 @@
     <string name="back_button_text_cancel">Não</string>
     <string name="menu_play_button_text">Jogar</string>
     <string name="menu_score_button_text">Pontuações</string>
+    <string name="level_selection_text">Select level</string>
+    <string name="level_text">Nível %1$d</string>
 </resources>

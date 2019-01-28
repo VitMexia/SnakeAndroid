@@ -13,9 +13,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
@@ -47,12 +50,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int STEP_TIME = 500;               // Milliseconds by step
     private boolean paused = false;
     private boolean dragDone = true;                        // Auxiliary var for swipe motions
-    private int xStart, yStart;
+    private int xStart, yStart;                             // Coordinates for swipe motions
     private boolean wonLevelGame;
     private Updater updater;
+    private int levelsWon;                                 // Counter for total levels beat by player
 
     /**
      * Method called when creating the activity. Sets up the game and all it's required elements.
+     *
      * @param savedInstanceState Instance state bundle when necessary (i.e. screen flips)
      */
     @Override
@@ -137,7 +142,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Block for restoring the current instance state, if any
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
+            // TODO: colocar estas strings chave todas em resource?
             model = (Game) savedInstanceState.getSerializable("game");
             level = (Level) savedInstanceState.getSerializable("level");
 
@@ -147,17 +153,22 @@ public class MainActivity extends AppCompatActivity {
             dragDone = savedInstanceState.getBoolean("dragDone");
             paused = savedInstanceState.getBoolean("paused");
             wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
+            levelsWon = savedInstanceState.getInt("levelsWon");
 
             setupGameView(level.getHeight(), level.getWidth());
-        }
-        else // If no instances then load the level
+        } else {// If no instances then load the level
+            Bundle extra = getIntent().getExtras();
+            levelsWon = extra != null ? extra.getInt("level") : 0;
+
             this.loadNextLevel();
+
+        }
     }
 
     /**
      * Updates the game boards with current level and game state information.
      */
-    private void updateBoards(){
+    private void updateBoards() {
         levelNumberView.setText(Integer.toString(level.getNumber()));
         applesNumberView.setText(Integer.toString(level.getRemainingApples()));
         scoreNumberView.setText(Integer.toString(model.getScore()));
@@ -165,10 +176,11 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Initial setup for the game view painting all of the tiles in the current level.
+     *
      * @param height
      * @param width
      */
-    private void setupGameView(int height, int width){
+    private void setupGameView(int height, int width) {
         view.setSize(width, height);            // Set view dimensions
 
         for (int l = 0; l < height; ++l) {                               // Create each tile for each cell
@@ -187,9 +199,9 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), getString(R.string.beat_level)
                                     + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
                             wonLevelGame = true;
-                            displayNextLevelButton();
-                        }
-                        else // Player lost
+                            updatedLevelsWonFile(); // Update save file
+                            displayNextLevelButton(); // Show button to start next level
+                        } else // Player lost
                             finishGame();
                     } else // Keep playing
                         level.step();
@@ -204,7 +216,13 @@ public class MainActivity extends AppCompatActivity {
     private void loadNextLevel() {
         try (InputStream file = getResources().openRawResource(R.raw.levels)) { // Open description file
             if (model == null) {
-                model = new Game(file);                                 // Create game model
+
+                Bundle extra = getIntent().getExtras();
+                // Create game model
+                if (levelsWon > 0)  // If player has already beat some levels
+                    model = new Game(file, levelsWon);
+                else
+                    model = new Game(file);
                 model.setListener(updater);                             // Set listener of game
             }
             level = model.loadNextLevel(file);
@@ -323,6 +341,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Save the current game state.
+     *
      * @param outState Bundle containing relevant information for the current game state.
      */
     @Override
@@ -334,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("dragDone", dragDone);
         outState.putBoolean("paused", paused);
         outState.putBoolean("wonLevelGame", wonLevelGame);
+        outState.putInt("levelsWon", levelsWon);
 
         view.removeHeartbeatListener();
     }
@@ -364,5 +384,16 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+
+    private void updatedLevelsWonFile(){
+        try (OutputStream outputStream = openFileOutput("savefile.txt", MODE_PRIVATE);
+             PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
+        ) {
+            out.print(levelsWon);
+        } catch (IOException e) {
+            Log.e("Snake", "Error saving level information to savefile", e);
+        }
     }
 }

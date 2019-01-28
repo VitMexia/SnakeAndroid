@@ -18,7 +18,8 @@
         </activity>
         <activity android:name=".VictoryActivity" />
         <activity android:name=".DefeatActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LevelSelection"></activity>
     </application>
 
 </manifest>

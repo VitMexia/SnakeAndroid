@@ -14,6 +14,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 
 public class Level implements Serializable {
 
+    private static final int APPLESTOWIN = 1;
     private int levelNumber, appleCount, startApples;
 
     public MapHolder mapHolder;
@@ -31,7 +32,7 @@ public class Level implements Serializable {
 
         this.levelNumber = levelNumber;
         this.mapHolder = new MapHolder(new Cell[height][width]);
-        this.appleCount = 10;//TODO: Correct to 10
+        this.appleCount = APPLESTOWIN;
         this.otherPlayers = new LinkedList<>();
         this.deadSnakes = new LinkedList<>();
     }

@@ -1,4 +1,4 @@
-
+4
 #1 15 x 15
               X
               X
@@ -61,3 +61,23 @@ X    A     X            X
 X          X            X
 X          X  @        MX
 XXXXXXXXXXXXXXXXXXXX XXXX
+
+#4 18 x 16
+XXXXXXXXXXXXXXXX
+X         *    X
+X      X       X
+X   A  X       X
+X              X
+X      X       X
+X      X       X
+X      X       X
+X      X       X
+X      A    M  X
+X      X       X
+X      X       X
+X      X       X
+X              X
+X   @  X       X
+X      X       X
+X            A X
+XXXXXXXXXXXXXXXX

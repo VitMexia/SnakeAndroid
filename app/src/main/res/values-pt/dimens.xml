@@ -4,4 +4,5 @@
     <dimen name="minUserInfoH">50dp</dimen>
     <dimen name="boardTextSize">15sp</dimen>
     <dimen name="victoryTextSize">40sp</dimen>
+    <dimen name="level_select_text_size">36sp</dimen>
 </resources>

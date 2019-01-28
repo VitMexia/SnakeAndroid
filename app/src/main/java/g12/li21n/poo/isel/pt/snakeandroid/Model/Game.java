@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class Game implements Serializable {
     private final InputStream input;
     private int score = 0;
-    private int levelNumber = 0;
+    private int levelNumber = 1;
     private Level curLevel = null;
     private Listener listener = null;
 
@@ -25,12 +25,17 @@ public class Game implements Serializable {
         input.mark(40 * 1024);
     }
 
+    public Game(InputStream levelsFile, int startLevel){
+        this(levelsFile);
+        levelNumber = startLevel;
+    }
+
     public Level loadNextLevel(InputStream levelsFile) throws Loader.LevelFormatException {
         try (InputStream input = new BufferedInputStream(levelsFile);
         Scanner in = new Scanner(input)){
             input.mark(40 * 1024);
             input.reset();
-            curLevel = new Loader(in).load(++levelNumber);
+            curLevel = new Loader(in).load(levelNumber++);
 
             if (curLevel != null) {
                 curLevel.init(this);
