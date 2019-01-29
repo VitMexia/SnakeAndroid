@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
         try (OutputStream outputStream = openFileOutput("savefile.txt", MODE_PRIVATE);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
         ) {
-            out.print(levelsWon);
+            out.print(level.getNumber());
         } catch (IOException e) {
             Log.e("Snake", "Error saving level information to savefile", e);
         }

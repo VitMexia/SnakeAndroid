@@ -1,8 +1,8 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,37 +20,45 @@ import java.util.Scanner;
  * User can only play a given level if he has already beat all previous levels.
  */
 public class LevelSelection extends AppCompatActivity {
-    private int levels;
+    private int levels, maxLevels;
+    private LinearLayout linearLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_selection);
-        LinearLayout linearLayout = findViewById(R.id.scroll_layout_id);
+
+        if (savedInstanceState != null) {
+            levels = savedInstanceState.getInt("levels");
+            linearLayout = findViewById(savedInstanceState.getInt("layout"));
+            maxLevels = savedInstanceState.getInt("maxLevels");
+        } else {
+            loadLevelInformation();
+            linearLayout = findViewById(R.id.scroll_layout_id);
+        }
+
+
+        if (levels == 0) {
+            startActivity(new Intent(LevelSelection.this, MainActivity.class));
+            finish();
+        }
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        levels = loadLevelsFromFile();
-
-        if (levels == 0){
-            startActivity(new Intent(LevelSelection.this, MainActivity.class));
-            finish();
-        }
-
         int[] colorArray = getResources().getIntArray(R.array.androidcolors); // Color array as defined in colors.xml
         ArrayList<Integer> androidColors = new ArrayList<>();
 
         // Generate color list, retrieved from the color array, so as to not have repeated colors next to each other
-        for(int i = 0, j = 0; i <= levels; i++, j++){
+        for (int i = 0, j = 0; i <= levels; i++, j++) {
             if (j == colorArray.length) // Loop back to the start of the color array if all colors have been used
                 j = 0;
             androidColors.add(colorArray[j]);
         }
 
         // Generate a button for each playable level
-        for (int i = 1; i <= levels + 1; i++) {
+        for (int i = 1; i <= levels + 1 && i <= maxLevels; i++) {
             Button btn = new Button(this);
             btn.setId(i);
             final int id_ = btn.getId();
@@ -66,23 +74,38 @@ public class LevelSelection extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                     Intent intent = new Intent(LevelSelection.this, MainActivity.class);
-                    intent.putExtra("level",id_);
+                    intent.putExtra("level", id_);
                     startActivity(intent);
+                    finish();
                 }
             });
         }
     }
 
-    private int loadLevelsFromFile(){
+    private void loadLevelInformation() {
         int levelsVal = 0;
         try (InputStream file = openFileInput("savefile.txt");
              Scanner input = new Scanner(file)) {
-            levelsVal = input.nextInt();
-        }catch (FileNotFoundException e) {  // If no file exists the user hasn't yet beat any levels
-            levelsVal = 0;
+            levels = input.nextInt();
+        } catch (FileNotFoundException e) {  // If no file exists the user hasn't yet beat any levels
+            levels = 0;
         } catch (IOException e) {
             Log.e("Snake", "Level Selection: Error reading save file.", e);
         }
-        return levelsVal;
+
+        try (InputStream file = getResources().openRawResource(R.raw.levels);
+             Scanner input = new Scanner(file)) {
+            maxLevels = input.nextInt();
+        } catch (IOException e) {
+            Log.e("Snake", "Level Selection: Error reading level count file.", e);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("levels", levels);
+        outState.putInt("layout", linearLayout.getId());
+        outState.putInt("maxLevels",maxLevels);
     }
 }

@@ -1,4 +1,4 @@
-4
+16 Total levels
 #1 15 x 15
               X
               X
@@ -63,6 +63,255 @@ X          X  @        MX
 XXXXXXXXXXXXXXXXXXXX XXXX
 
 #4 18 x 16
+XXXXXXXXXXXXXXXX
+X         *    X
+X      X       X
+X   A  X       X
+X              X
+X      X       X
+X      X       X
+X      X       X
+X      X       X
+X      A    M  X
+X      X       X
+X      X       X
+X      X       X
+X              X
+X   @  X       X
+X      X       X
+X            A X
+XXXXXXXXXXXXXXXX
+
+#5 15 x 15
+M             X
+              X
+       A      X
+           XXXX
+
+XXXXX
+
+A             A
+
+       @
+
+X
+X
+X             X
+A             X
+
+#6 20 x 20
+XXXXXXXXX XXXXXXXXXX
+X                  X
+X               A  X
+X   A              X
+X        X         X
+X        X         X
+X        X         X
+X             M    X
+X                  X
+     XXXXXXXXX
+X                  X
+X                  X
+X                  X
+X   @    X    *    X
+X   A    X         X
+X        X         X
+X                  X
+X                  X
+X                  X
+XXXXXXXXX XXXXXXXXXX
+
+#7 22 x 25
+XXXXXXXXXXXXXXXXXXXX XXXX
+X             X         X
+X  A          X  A      X
+X    XXX            *   X
+X   M         X         X
+XXXXX  XXXXXXXXXXXXXXXXXX
+X                       X
+X   *               A   X
+X                       X
+X      XXXXXXXXXXXXXXXXXX
+X                       X
+X    M                  X
+X                       X
+XXXXXXXXXXXXXXXXXXXXX   X
+X                X      X
+X                X      X
+X   *            X      X
+X          X            X
+X    A     X            X
+X          X            X
+X          X  @        MX
+XXXXXXXXXXXXXXXXXXXX XXXX
+
+#8 18 x 16
+XXXXXXXXXXXXXXXX
+X         *    X
+X      X       X
+X   A  X       X
+X              X
+X      X       X
+X      X       X
+X      X       X
+X      X       X
+X      A    M  X
+X      X       X
+X      X       X
+X      X       X
+X              X
+X   @  X       X
+X      X       X
+X            A X
+XXXXXXXXXXXXXXXX
+
+#9 15 x 15
+M             X
+              X
+       A      X
+           XXXX
+
+XXXXX
+
+A             A
+
+       @
+
+X
+X
+X             X
+A             X
+
+#10 20 x 20
+XXXXXXXXX XXXXXXXXXX
+X                  X
+X               A  X
+X   A              X
+X        X         X
+X        X         X
+X        X         X
+X             M    X
+X                  X
+     XXXXXXXXX
+X                  X
+X                  X
+X                  X
+X   @    X    *    X
+X   A    X         X
+X        X         X
+X                  X
+X                  X
+X                  X
+XXXXXXXXX XXXXXXXXXX
+
+#11 22 x 25
+XXXXXXXXXXXXXXXXXXXX XXXX
+X             X         X
+X  A          X  A      X
+X    XXX            *   X
+X   M         X         X
+XXXXX  XXXXXXXXXXXXXXXXXX
+X                       X
+X   *               A   X
+X                       X
+X      XXXXXXXXXXXXXXXXXX
+X                       X
+X    M                  X
+X                       X
+XXXXXXXXXXXXXXXXXXXXX   X
+X                X      X
+X                X      X
+X   *            X      X
+X          X            X
+X    A     X            X
+X          X            X
+X          X  @        MX
+XXXXXXXXXXXXXXXXXXXX XXXX
+
+#12 18 x 16
+XXXXXXXXXXXXXXXX
+X         *    X
+X      X       X
+X   A  X       X
+X              X
+X      X       X
+X      X       X
+X      X       X
+X      X       X
+X      A    M  X
+X      X       X
+X      X       X
+X      X       X
+X              X
+X   @  X       X
+X      X       X
+X            A X
+XXXXXXXXXXXXXXXX
+
+#13 15 x 15
+M             X
+              X
+       A      X
+           XXXX
+
+XXXXX
+
+A             A
+
+       @
+
+X
+X
+X             X
+A             X
+
+#14 20 x 20
+XXXXXXXXX XXXXXXXXXX
+X                  X
+X               A  X
+X   A              X
+X        X         X
+X        X         X
+X        X         X
+X             M    X
+X                  X
+     XXXXXXXXX
+X                  X
+X                  X
+X                  X
+X   @    X    *    X
+X   A    X         X
+X        X         X
+X                  X
+X                  X
+X                  X
+XXXXXXXXX XXXXXXXXXX
+
+#15 22 x 25
+XXXXXXXXXXXXXXXXXXXX XXXX
+X             X         X
+X  A          X  A      X
+X    XXX            *   X
+X   M         X         X
+XXXXX  XXXXXXXXXXXXXXXXXX
+X                       X
+X   *               A   X
+X                       X
+X      XXXXXXXXXXXXXXXXXX
+X                       X
+X    M                  X
+X                       X
+XXXXXXXXXXXXXXXXXXXXX   X
+X                X      X
+X                X      X
+X   *            X      X
+X          X            X
+X    A     X            X
+X          X            X
+X          X  @        MX
+XXXXXXXXXXXXXXXXXXXX XXXX
+
+#16 18 x 16
 XXXXXXXXXXXXXXXX
 X         *    X
 X      X       X
