@@ -71,10 +71,11 @@ public abstract class SnakeCells extends MovingCells {
             bodyToAdd += 10 + 2 * ((DeadCell) cell).bodyList.size();
             meal = cell;
             justAte = true;
-        } else if (cell instanceof WallCell) {
+        } else if (cell instanceof WallCell || cell instanceof SnakeCells) {
             killSnake();
             return;
-        } else if (cell instanceof BodyCell) {
+        }
+        else if (cell instanceof BodyCell) {
             boolean notMoved = false;
             for (SnakeCells snake : snakes) {
                 if (snake.equals(this)) {
