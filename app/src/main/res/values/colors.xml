@@ -8,7 +8,7 @@
     <color name="boardTextColor">#ffffff</color>
     <color name="buttonTextcolor">#ffffff</color>
     <color name="buttonColor">#fb7500</color>
-    <color name="menu_play_button_color">#57A773</color>
+    <color name="menu_play_button_color">#57a773</color>
     <color name="menu_score_button_color">#6A8EAE</color>
     <color name="menu_background_color">#1e1e1e</color>
     <color name="select_level_text">#fd0509</color>

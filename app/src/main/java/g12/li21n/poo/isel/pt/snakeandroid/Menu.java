@@ -20,9 +20,16 @@ public class Menu extends AppCompatActivity {
         levelSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Menu.this, LevelSelection.class);
+                Intent intent = new Intent(getApplicationContext(), LevelSelection.class);
                 intent.putExtra("teste","ok");
                 startActivity(intent);
+            }
+        });
+
+        scoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), InsertNewScoreActivity.class));
             }
         });
 

@@ -17,4 +17,10 @@
     <string name="menu_score_button_text">Pontuações</string>
     <string name="level_selection_text">Select level</string>
     <string name="level_text">Nível %1$d</string>
+    <string name="highscore_tile_text">10 Melhores Pontuações</string>
+    <string name="insert_score_name_text">Insira o seu nome (3–10 carateres)</string>
+    <string name="default_name_text">Nome</string>
+    <string name="name_confirm_button_text">Confirmar</string>
+    <string name="score_congrat_text">Nova pontuação recorde!</string>
+    <string name="name_error_text">Nome deve ter 3 ou mais carateres</string>
 </resources>

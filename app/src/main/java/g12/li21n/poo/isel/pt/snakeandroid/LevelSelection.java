@@ -37,7 +37,6 @@ public class LevelSelection extends AppCompatActivity {
             linearLayout = findViewById(R.id.scroll_layout_id);
         }
 
-
         if (levels == 0) {
             startActivity(new Intent(LevelSelection.this, MainActivity.class));
             finish();
@@ -65,6 +64,7 @@ public class LevelSelection extends AppCompatActivity {
 
             btn.setText(String.format(getResources().getString(R.string.level_text), id_)); // Retrieve formatted button text from resources and set as button text
             btn.setTextColor(getResources().getColor(R.color.buttonTextcolor, getTheme()));
+            btn.setTextSize(getResources().getDimension(R.dimen.level_button_text_size));
 
             btn.setBackgroundColor(androidColors.remove(0)); // Retrieve the next color from the color array
 
@@ -82,8 +82,10 @@ public class LevelSelection extends AppCompatActivity {
         }
     }
 
+    /**
+     * Load save game information from device memory and check max level from resource file.
+     */
     private void loadLevelInformation() {
-        int levelsVal = 0;
         try (InputStream file = openFileInput("savefile.txt");
              Scanner input = new Scanner(file)) {
             levels = input.nextInt();

@@ -16,4 +16,10 @@
     <string name="menu_score_button_text">Scoreboard</string>
     <string name="level_selection_text">Select level</string>
     <string name="level_text">Level %1$d</string>
+    <string name="highscore_tile_text">Top 10 High Scores</string>
+    <string name="insert_score_name_text">Insert your name (3–10 characters)</string>
+    <string name="default_name_text">Name</string>
+    <string name="name_confirm_button_text">Confirm</string>
+    <string name="score_congrat_text">New high score!</string>
+    <string name="name_error_text">Name must be 3 characters or more</string>
 </resources>

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean wonLevelGame;
     private Updater updater;
     private int levelsWon;                                 // Counter for total levels beat by player
+
+    private String m_Text;
 
     /**
      * Method called when creating the activity. Sets up the game and all it's required elements.
@@ -200,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                                     + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
                             wonLevelGame = true;
                             updatedLevelsWonFile(); // Update save file
+                            updateScoreFile();
                             displayNextLevelButton(); // Show button to start next level
                         } else // Player lost
                             finishGame();
@@ -386,12 +391,27 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * Updates the count of total levels won
+     */
     private void updatedLevelsWonFile(){
+        if (level.getNumber() <= levelsWon) // Only proceed if the new level beat is higher than the previous record
+            return;
+
         try (OutputStream outputStream = openFileOutput("savefile.txt", MODE_PRIVATE);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
         ) {
             out.print(level.getNumber());
+        } catch (IOException e) {
+            Log.e("Snake", "Error saving level information to savefile", e);
+        }
+    }
+
+    private void updateScoreFile(){
+        try (OutputStream outputStream = openFileOutput("scores.txt", MODE_PRIVATE);
+             PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
+        ) {
+            out.print(m_Text + " " + model.getScore());
         } catch (IOException e) {
             Log.e("Snake", "Error saving level information to savefile", e);
         }

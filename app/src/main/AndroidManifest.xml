@@ -19,7 +19,9 @@
         <activity android:name=".VictoryActivity" />
         <activity android:name=".DefeatActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".LevelSelection"></activity>
+        <activity android:name=".LevelSelection" />
+        <activity android:name=".HighscoresActivity" />
+        <activity android:name=".InsertNewScoreActivity"></activity>
     </application>
 
 </manifest>
