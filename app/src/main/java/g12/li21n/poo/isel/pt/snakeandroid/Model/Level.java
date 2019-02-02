@@ -78,7 +78,8 @@ public class Level implements Serializable {
         for (MovingCells others : otherPlayers) {
             if (others.isDead && others instanceof MouseCell) {
                 //otherPlayers.remove(others);
-                // TODO: isto é suposto estar comentado ?
+                // TODO: isto é suposto estar comentado ? [Vit] Yep, precisa de ser re-escrito
+
             } else
                 others.move(stepCount, mapHolder);
 
@@ -149,7 +150,6 @@ public class Level implements Serializable {
 
     //sets the snake Direction based on user input
     public void setSnakeDirection(Dir dir) {
-//        if (!playerHead.getDirection().isOppositeOrSame(dir))
         playerHead.setDirection(dir);
 
     }

@@ -29,7 +29,7 @@ public class Menu extends AppCompatActivity {
         scoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), InsertNewScoreActivity.class));
+                startActivity(new Intent(getApplicationContext(), HighscoresActivity.class));
             }
         });
 

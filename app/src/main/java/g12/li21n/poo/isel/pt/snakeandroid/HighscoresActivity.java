@@ -21,6 +21,7 @@ public class HighscoresActivity extends AppCompatActivity {
         scoreList = findViewById(R.id.scorelistID);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, scores) {
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.activity_highscores, scores) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
