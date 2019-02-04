@@ -3,6 +3,8 @@ package g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.AppleCell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.BodyCell;
@@ -22,18 +24,24 @@ public abstract class CellTile implements Tile  {
     public final static int SIDE = 1;
     private int color;
     private int foregroundColor;
-    protected Dir direction;
 
+
+    protected final Paint brush;
+    protected final Paint brushEye;
+
+    public CellTile(){
+        this.brush = new Paint();
+        brush.setColor(Color.rgb(230, 230, 230));
+
+        this.brushEye = new Paint();
+        brushEye.setColor(Color.BLACK);
+    }
 
     public void setColor(int color) {
         this.color = color;
     }
 
     public void setForegroundColor(int color){this.foregroundColor = color;}
-
-    public void setDirection(Dir direction){
-        this.direction = direction;
-    }
 
     public static CellTile tileOf(Context context, Cell cell) {
 

@@ -6,21 +6,17 @@ import android.graphics.Paint;
 
 public class BadDeadTile extends HeadsTiles{
 
-    private final Paint brush;
+
     private final Paint brushIn;
-    private final Paint brusheye;
+
     private final Paint xEye;
 
     public BadDeadTile(){
 
-        this.brush = new Paint();
-        brush.setColor(Color.rgb(230, 230, 230));
 
         this.brushIn = new Paint();
         brushIn.setColor(Color.rgb(102, 255, 255));
 
-        this.brusheye = new Paint();
-        brusheye.setColor(Color.BLACK);
 
         this.xEye = new Paint();
         xEye.setColor(Color.RED);
@@ -31,16 +27,19 @@ public class BadDeadTile extends HeadsTiles{
     public void draw(Canvas canvas, int side) {
         canvas.drawPaint(brush);
 
+        setEyesPositions(side);
+        setXPositions(side);
+
         canvas.drawCircle(side/2, side/2, side/2, brushIn );
-        canvas.drawCircle(side/4, side/4, side/9, brusheye);
-        canvas.drawCircle(side-side/4, side/4, side/9, brusheye);
 
-        canvas.drawLine(side/4-side/8,side/4-side/8,side/4+side/8,side/4+side/8,xEye);
-        canvas.drawLine(side/4+side/8,side/4-side/8,side/4-side/8,side/4+side/8,xEye);
+        canvas.drawCircle(eye1x, eye1y, side/9, brushEye);
+        canvas.drawCircle(eye2x, eye2y, side/9, brushEye);
 
-        canvas.drawLine(side -side/4-side/8,side/4-side/8,side-side/4+side/8,side/4+side/8,xEye);
-        canvas.drawLine(side -side/4+side/8,side/4-side/8,side -side/4-side/8,side/4+side/8,xEye);
+        canvas.drawLine(eye1xX1Start1,eye1xY1Start1,eye1xX1End1,eye1xY1End1,xEye);
+        canvas.drawLine(eye1xX1Start2,eye1xY1Start2,eye1xX1End2,eye1xY1End2,xEye);
 
+        canvas.drawLine(eye2xX1Start1,eye2xY1Start1,eye2xX1End1,eye2xY1End1,xEye);
+        canvas.drawLine(eye2xX1Start2,eye2xY1Start2,eye2xX1End2,eye2xY1End2,xEye);
 
     }
 

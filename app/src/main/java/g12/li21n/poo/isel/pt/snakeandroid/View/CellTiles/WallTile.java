@@ -12,14 +12,14 @@ import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 public class WallTile extends CellTile implements Tile {
 
     private final Img image;
-    private final Paint brush;
+
 
     public WallTile(Context context){
 
         int imgID = R.drawable.bricks;
 
         this.image = new Img(context, imgID);
-        this.brush = new Paint();
+
     }
 
     @Override

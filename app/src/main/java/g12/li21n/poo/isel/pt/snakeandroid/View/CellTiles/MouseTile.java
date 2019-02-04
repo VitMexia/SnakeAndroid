@@ -13,15 +13,12 @@ import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
 public class MouseTile extends CellTile implements Tile {
 
     private final Img image;
-    private final Paint brush;
 
     public MouseTile(Context context){
         int imgID = R.drawable.mouse;
 
         this.image = new Img(context, imgID);
-        this.brush = new Paint();
 
-        brush.setColor(Color.rgb(230, 230, 230));
     }
 
     @Override

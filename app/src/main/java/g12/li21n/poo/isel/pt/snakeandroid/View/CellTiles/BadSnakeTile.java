@@ -7,30 +7,26 @@ import android.graphics.Paint;
 
 public class BadSnakeTile extends HeadsTiles {
 
-    private final Paint brush;
+
     private final Paint brushIn;
-    private final Paint brusheye;
+
 
     public BadSnakeTile(){
-
-
-        this.brush = new Paint();
-        brush.setColor(Color.rgb(230, 230, 230));
 
         this.brushIn = new Paint();
         brushIn.setColor(Color.rgb(102, 255, 255));
 
-        this.brusheye = new Paint();
-        brusheye.setColor(Color.BLACK);
     }
 
     @Override
     public void draw(Canvas canvas, int side) {
         canvas.drawPaint(brush);
-//        canvas.drawCircle(side/2, side/2, side/1.7F, brushOut );
+
+        setEyesPositions(side);
+
         canvas.drawCircle(side/2, side/2, side/2, brushIn );
-        canvas.drawCircle(side/4, side/4, side/9, brusheye);
-        canvas.drawCircle(side-side/4, side/4, side/9, brusheye);
+        canvas.drawCircle(eye1x, eye1y, side/9, brushEye);
+        canvas.drawCircle(eye2x, eye2y, side/9, brushEye);
 
     }
 

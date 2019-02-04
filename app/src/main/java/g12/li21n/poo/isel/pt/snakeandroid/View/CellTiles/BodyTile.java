@@ -7,8 +7,6 @@ import android.graphics.Paint;
 
 public class BodyTile extends CellTile {
 
-
-    private final Paint brush;
     private final Paint brushOut;
     private final Paint brushIn;
 
@@ -17,8 +15,6 @@ public class BodyTile extends CellTile {
         this.brushOut = new Paint();
         brushOut.setColor(Color.RED);
 
-        this.brush = new Paint();
-        brush.setColor(Color.rgb(230, 230, 230));
 
         this.brushIn = new Paint();
         brushIn.setColor(Color.BLACK);
