@@ -19,14 +19,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class HighScoreHandler implements Serializable {
 
     private final String highScoreFileName = "scores.txt";
-    public  final List<HighScoreItem> hsList; //TODO: DOes it need to be public?
+    public  final List<HighScoreItem> highScoresList;
     private final Context context;
     private int maxScore;
     private int minScore;
 
     public HighScoreHandler(Context context){
         this.context = context;
-        this.hsList = getScores();
+        this.highScoresList = getScores();
 
     }
 
@@ -70,7 +70,7 @@ public class HighScoreHandler implements Serializable {
         ) {
 
             //out.println("");
-            for (HighScoreItem hsi : hsList) {
+            for (HighScoreItem hsi : highScoresList) {
                 out.println(hsi.toStringToFile());
 
             }
@@ -81,7 +81,7 @@ public class HighScoreHandler implements Serializable {
     }
 
     public boolean isTop10(int score){
-        if(score> minScore || hsList.size()<10) return true;
+        if(score> minScore || highScoresList.size()<10) return true;
         return false;
     }
 
@@ -91,25 +91,25 @@ public class HighScoreHandler implements Serializable {
 
         int index = 0;
         boolean added = false;
-        for (HighScoreItem hsi : hsList) {
+        for (HighScoreItem hsi : highScoresList) {
 
             if(hsi.getScore()<newHSI.getScore()) {
-                hsList.add(index, newHSI);
+                highScoresList.add(index, newHSI);
                 added = true;
                 break;
             }
             else if(hsi.getScore()==newHSI.getScore()){
-                hsList.add(index+1, newHSI);
+                highScoresList.add(index, newHSI);
                 added = true;
                 break;
             }
 
             index +=1;
         }
-        if(!added)hsList.add(newHSI);
+        if(!added) highScoresList.add(newHSI);
 
-        if(hsList.size()>10){
-            hsList.remove(10);
+        if(highScoresList.size()>10){
+            highScoresList.remove(10);
         }
         saveScores();
     }

@@ -24,10 +24,10 @@ public class HighscoresActivity extends AppCompatActivity {
         scoreList = findViewById(R.id.scorelistID);
 
         HighScoreHandler highScoreHandler = new HighScoreHandler(this);
-        scores = new String[highScoreHandler.hsList.size()];
+        scores = new String[highScoreHandler.highScoresList.size()];
         int i= 0;
 
-        for (HighScoreItem hsi: highScoreHandler.hsList) {
+        for (HighScoreItem hsi: highScoreHandler.highScoresList) {
             scores[i++] = hsi.toString();
         }
 

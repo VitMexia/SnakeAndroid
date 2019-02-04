@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
             assert !(tile instanceof EmptyTile);
 
             if(tile instanceof HeadsTiles){
-                ((HeadsTiles) tile).direction = ((MovingCells)cell).getDirection();
+                ((HeadsTiles) tile).setDirection(((MovingCells)cell).getDirection());
             }
 
             view.setTile(toC, toL, tile);

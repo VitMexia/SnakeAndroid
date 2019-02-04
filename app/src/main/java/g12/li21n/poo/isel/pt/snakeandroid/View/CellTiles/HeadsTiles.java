@@ -10,7 +10,7 @@ public abstract class HeadsTiles extends CellTile {
 
 
 
-    public Dir direction = Dir.UP;
+    protected Dir direction = Dir.UP;
     protected float eye1x = 0;
     protected float eye1y = 0;
     protected float eye2x = 0;
