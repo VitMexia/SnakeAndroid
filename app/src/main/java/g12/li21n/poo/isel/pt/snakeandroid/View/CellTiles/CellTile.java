@@ -46,7 +46,9 @@ public abstract class CellTile implements Tile  {
         }
 
         if(cell instanceof DeadCell && !((DeadCell)cell).isBad){
-            return new DeadTile();
+            DeadTile deadTile = new DeadTile();
+            deadTile.direction = ((DeadCell) cell).getDirection();
+            return deadTile;
         }
 
         if(cell instanceof BodyCell){
@@ -66,11 +68,15 @@ public abstract class CellTile implements Tile  {
         }
 
         if(cell instanceof EnemySnakeCell){
+            BadSnakeTile badSnakeTile = new BadSnakeTile();
+            badSnakeTile.direction = ((EnemySnakeCell) cell).getDirection();
             return new BadSnakeTile();
         }
 
         if(cell instanceof DeadCell && ((DeadCell)cell).isBad){
-            return new BadDeadTile();
+            BadDeadTile badDeadTile = new BadDeadTile();
+            badDeadTile.direction = ((DeadCell) cell).getDirection();
+            return badDeadTile;
         }
         return null;
     }

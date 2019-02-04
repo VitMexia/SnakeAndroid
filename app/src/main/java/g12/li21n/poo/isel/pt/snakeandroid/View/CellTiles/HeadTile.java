@@ -30,29 +30,7 @@ public class HeadTile extends HeadsTiles {
     public void draw(Canvas canvas, int side) {
         canvas.drawPaint(brush);
 
-        float eye1x = side/4;
-        float eye1y = side/4;
-        float eye2x = side-side/4;
-        float eye2y = side/4;
-
-        switch(direction){
-
-            case RIGHT:
-                eye1x = side-side/4;
-                eye1y = side-side/4;
-                break;
-            case DOWN:
-                eye1x = side-side/4;
-                eye1y = side-side/4;
-                eye2x = side/4;
-                eye2y = side-side/4;
-                break;
-            case LEFT:
-                eye2x = side/4;
-                eye2y = side- side/4;
-                break;
-
-        }
+        setEyesPositions(side);
 
         canvas.drawCircle(side/2, side/2, side/2, brushIn );
         canvas.drawCircle(eye1x, eye1y, side/9, brusheye);

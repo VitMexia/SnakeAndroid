@@ -126,6 +126,7 @@ public abstract class SnakeCells extends MovingCells {
         DeadCell dc = new DeadCell();
         dc.bodyList = this.bodyList;
         dc.setPosition(this.getPosition());
+        dc.setDirection(this.getDirection());
 
         removeCell(this.getPosition());
         createCell(dc);

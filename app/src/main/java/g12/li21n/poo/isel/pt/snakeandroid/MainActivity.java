@@ -23,6 +23,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.MovingCells;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Game;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.HighScoreHandler;
@@ -328,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
             assert !(tile instanceof EmptyTile);
 
             if(tile instanceof HeadsTiles){
-                ((HeadsTiles) tile).direction = level.mapHolder.getDirection(new Position(toL,toC) , new Position(fromL, fromC));
+                ((HeadsTiles) tile).direction = ((MovingCells)cell).getDirection();
             }
 
             view.setTile(toC, toL, tile);
