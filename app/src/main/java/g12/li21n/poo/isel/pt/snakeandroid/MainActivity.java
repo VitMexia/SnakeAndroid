@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.Cell;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Game;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.HighScoreHandler;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Level;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Loader;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.CellTile;
@@ -204,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                                     + " " + level.getNumber() + "!", Toast.LENGTH_LONG).show();
                             wonLevelGame = true;
                             updatedLevelsWonFile(); // Update save file
-                            updateScoreFile();
+                            //updateScoreFile();
                             displayNextLevelButton(); // Show button to start next level
                         } else // Player lost
                             finishGame();
@@ -272,6 +273,9 @@ public class MainActivity extends AppCompatActivity {
     private void finishGame() {
         view.removeHeartbeatListener();
         Intent intent;
+        Intent intent1;
+        HighScoreHandler highScoreHandler = new HighScoreHandler(this);
+        //highScoreHandler.updateTop10("VIT", 10);
 
         if (wonLevelGame) {
             intent = new Intent(MainActivity.this, VictoryActivity.class);
@@ -279,6 +283,10 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(MainActivity.this, DefeatActivity.class);
 
             //Toast.makeText(getApplicationContext(), "test test test", Toast.LENGTH_LONG).show();
+        }
+
+        if(highScoreHandler.isTop10(model.getScore())){
+            intent.putExtra("highScore", model.getScore());
         }
 
         startActivity(intent);
@@ -410,13 +418,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void updateScoreFile(){
-        try (OutputStream outputStream = openFileOutput("scores.txt", MODE_PRIVATE);
-             PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
-        ) {
-            out.print(m_Text + " " + model.getScore());
-        } catch (IOException e) {
-            Log.e("Snake", "Error saving level information to savefile", e);
-        }
-    }
+//    private void updateScoreFile(){
+//        try (OutputStream outputStream = openFileOutput("scores.txt", MODE_PRIVATE);
+//             PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
+//        ) {
+//            out.print(m_Text + " " + model.getScore());
+//        } catch (IOException e) {
+//            Log.e("Snake", "Error saving level information to savefile", e);
+//        }
+//    }
 }

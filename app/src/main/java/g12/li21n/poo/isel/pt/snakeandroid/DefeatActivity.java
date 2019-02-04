@@ -1,5 +1,6 @@
 package g12.li21n.poo.isel.pt.snakeandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,13 @@ public class DefeatActivity extends AppCompatActivity {
         closebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(getIntent().getSerializableExtra("highScore") != null){
+                    Intent intent = new Intent(DefeatActivity.this, InsertNewScoreActivity.class);
+                    intent.putExtra("highScore", getIntent().getSerializableExtra("highScore"));
+                    startActivity(intent);
+                }
+
                 finish();
 
             }
