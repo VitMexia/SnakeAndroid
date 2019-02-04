@@ -28,8 +28,10 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Game;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.HighScoreHandler;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Level;
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Loader;
+import g12.li21n.poo.isel.pt.snakeandroid.Model.Position;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.CellTile;
 import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.EmptyTile;
+import g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles.HeadsTiles;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnBeatListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.OnTileTouchListener;
 import g12.li21n.poo.isel.pt.snakeandroid.View.Tile.Tile;
@@ -58,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private Updater updater;
     private int levelsWon;                                 // Counter for total levels beat by player
 
-    private String m_Text;
 
     /**
      * Method called when creating the activity. Sets up the game and all it's required elements.
@@ -325,6 +326,11 @@ public class MainActivity extends AppCompatActivity {
         public void cellMoved(int fromL, int fromC, int toL, int toC, Cell cell) {
             Tile tile = view.getTile(fromC, fromL);
             assert !(tile instanceof EmptyTile);
+
+            if(tile instanceof HeadsTiles){
+                ((HeadsTiles) tile).direction = level.mapHolder.getDirection(new Position(toL,toC) , new Position(fromL, fromC));
+            }
+
             view.setTile(toC, toL, tile);
             view.invalidate(toC, toL);
             cellRemoved(fromL, fromC);
@@ -418,13 +424,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private void updateScoreFile(){
-//        try (OutputStream outputStream = openFileOutput("scores.txt", MODE_PRIVATE);
-//             PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
-//        ) {
-//            out.print(m_Text + " " + model.getScore());
-//        } catch (IOException e) {
-//            Log.e("Snake", "Error saving level information to savefile", e);
-//        }
-//    }
 }

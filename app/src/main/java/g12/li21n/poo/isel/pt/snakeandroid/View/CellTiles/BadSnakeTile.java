@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class BadSnakeTile extends CellTile {
+public class BadSnakeTile extends HeadsTiles {
 
     private final Paint brush;
     private final Paint brushIn;
