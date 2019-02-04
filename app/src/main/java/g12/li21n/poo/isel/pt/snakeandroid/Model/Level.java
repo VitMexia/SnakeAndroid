@@ -14,7 +14,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.Cells.SnakeCells;
 
 public class Level implements Serializable {
 
-    private static final int APPLESTOWIN = 2;
+    private static final int APPLESTOWIN = 1;
     private int levelNumber, appleCount, startApples;
 
     public MapHolder mapHolder;

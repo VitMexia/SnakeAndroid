@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private int xStart, yStart;                             // Coordinates for swipe motions
     private boolean wonLevelGame;
     private Updater updater;
-    private int levelsWon;                                 // Counter for total levels beat by player
+    private int levelsWon;                                 // Max level beat during current session
+    private int maxLevel;                                   // Max level beat before session
 
 
     /**
@@ -161,11 +162,19 @@ public class MainActivity extends AppCompatActivity {
             paused = savedInstanceState.getBoolean("paused");
             wonLevelGame = savedInstanceState.getBoolean("wonLevelGame");
             levelsWon = savedInstanceState.getInt("levelsWon");
+            maxLevel = savedInstanceState.getInt("maxLevel");
 
             setupGameView(level.getHeight(), level.getWidth());
         } else {// If no instances then load the level
             Bundle extra = getIntent().getExtras();
-            levelsWon = extra != null ? extra.getInt("level") : 0;
+
+            if (extra != null){
+                levelsWon = extra.getInt("level");
+                maxLevel = extra.getInt("levelhistory");
+            } else {
+                levelsWon = 0;
+                maxLevel = 0;
+            }
 
             this.loadNextLevel();
 
@@ -377,6 +386,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putBoolean("paused", paused);
         outState.putBoolean("wonLevelGame", wonLevelGame);
         outState.putInt("levelsWon", levelsWon);
+        outState.putInt("maxLevel",maxLevel);
 
         view.removeHeartbeatListener();
     }
@@ -413,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
      * Updates the count of total levels won
      */
     private void updatedLevelsWonFile(){
-        if (level.getNumber() <= levelsWon) // Only proceed if the new level beat is higher than the previous record
+        if (level.getNumber() < maxLevel) // Only proceed if the new level beat is higher than the previous record
             return;
 
         try (OutputStream outputStream = openFileOutput("savefile.txt", MODE_PRIVATE);

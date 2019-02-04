@@ -75,6 +75,7 @@ public class LevelSelection extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent intent = new Intent(LevelSelection.this, MainActivity.class);
                     intent.putExtra("level", id_);
+                    intent.putExtra("levelhistory",levels);
                     startActivity(intent);
                     finish();
                 }
@@ -108,6 +109,5 @@ public class LevelSelection extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt("levels", levels);
         outState.putInt("layout", linearLayout.getId());
-        outState.putInt("maxLevels",maxLevels);
     }
 }

@@ -28,8 +28,7 @@ public class HighscoresActivity extends AppCompatActivity {
         int i= 0;
 
         for (HighScoreItem hsi: highScoreHandler.hsList) {
-            scores[i] = hsi.toString();
-            i+=1;
+            scores[i++] = hsi.toString();
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, android.R.id.text1, scores) {

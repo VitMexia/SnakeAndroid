@@ -9,7 +9,7 @@
     <dimen name="menu_button_text_size">30sp</dimen>
     <dimen name="level_select_text_size">36sp</dimen>
     <dimen name="level_button_text_size">10sp</dimen>
-    <dimen name="score_text_size">6sp</dimen>
+    <dimen name="score_text_size">12sp</dimen>
     <dimen name="insert_score_name_text_size">20sp</dimen>
     <dimen name="edit_name_text_size">30sp</dimen>
 
