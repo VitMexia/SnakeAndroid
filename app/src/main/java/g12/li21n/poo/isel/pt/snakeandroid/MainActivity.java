@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private int levelsWon;                                 // Max level beat during current session
     private int maxLevel;                                   // Max level beat before session
 
+    private final String saveLevelsWonFile = "savefile.txt";
+
 
     /**
      * Method called when creating the activity. Sets up the game and all it's required elements.
@@ -283,16 +285,12 @@ public class MainActivity extends AppCompatActivity {
     private void finishGame() {
         view.removeHeartbeatListener();
         Intent intent;
-        Intent intent1;
         HighScoreHandler highScoreHandler = new HighScoreHandler(this);
-        //highScoreHandler.updateTop10("VIT", 10);
 
         if (wonLevelGame) {
             intent = new Intent(MainActivity.this, VictoryActivity.class);
         } else {
             intent = new Intent(MainActivity.this, DefeatActivity.class);
-
-            //Toast.makeText(getApplicationContext(), "test test test", Toast.LENGTH_LONG).show();
         }
 
         if(highScoreHandler.isTop10(model.getScore())){
@@ -300,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
-        Toast.makeText(getApplicationContext(), "test test test", Toast.LENGTH_LONG).show();
+
         finish();
 
     }
@@ -425,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         if (level.getNumber() < maxLevel) // Only proceed if the new level beat is higher than the previous record
             return;
 
-        try (OutputStream outputStream = openFileOutput("savefile.txt", MODE_PRIVATE);
+        try (OutputStream outputStream = openFileOutput(saveLevelsWonFile, MODE_PRIVATE);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
         ) {
             out.print(level.getNumber());

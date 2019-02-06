@@ -101,7 +101,7 @@ public class HighScoreHandler implements Serializable {
     }
 
     /**
-     * Insert the new score into the board
+     * Updates the List of HighScores
      * @param name Player name associated with the score
      * @param score The amount of points in the score
      */

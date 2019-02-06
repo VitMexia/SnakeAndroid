@@ -1,14 +1,14 @@
 package g12.li21n.poo.isel.pt.snakeandroid.View.CellTiles;
 
-import android.graphics.Color;
-import android.graphics.Paint;
-
 import g12.li21n.poo.isel.pt.snakeandroid.Model.Dir;
 
+/**
+ * Saves and sets all variables that are responsible for the creation
+ * of the heads of the snakes (HeadTile, BadSnakeTile, BadDeadTile, DeadTile)
+ * with the eyes and dead eyes based on the direction
+ */
+
 public abstract class HeadsTiles extends CellTile {
-
-
-
 
     protected Dir direction = Dir.UP;
     protected float eye1x = 0;
@@ -37,14 +37,18 @@ public abstract class HeadsTiles extends CellTile {
     protected float eye2xY1End2 = 0;
 
 
-
-
-
+    /**
+     * sets tile direction
+     * @param direction
+     */
     public void setDirection(Dir direction){
         this.direction = direction;
     }
 
-
+    /**
+     * sets eyes positions
+     * @param side
+     */
     protected void setEyesPositions(int side) {
         eye1x = side / 4;
         eye1y = side / 4;
@@ -71,6 +75,11 @@ public abstract class HeadsTiles extends CellTile {
         }
     }
 
+    /**
+     * sets dead eyes positions
+     * two lines for each eye
+     * @param side
+     */
     protected void setXPositions(int side){
 
 
