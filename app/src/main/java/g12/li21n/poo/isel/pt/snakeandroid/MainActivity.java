@@ -235,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
         try (InputStream file = getResources().openRawResource(R.raw.levels)) { // Open description file
             if (model == null) {
 
-                //Bundle extra = getIntent().getExtras();
                 // Create game model
                 if (levelsWon > 0)  // If player has already beat some levels
                     model = new Game(file, levelsWon);

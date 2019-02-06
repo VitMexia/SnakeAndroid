@@ -29,7 +29,8 @@ public class HighScoreHandler implements Serializable {
     public HighScoreHandler(Context context){
         this.context = context;
         this.highScoresList = getScores();
-
+        maxScore = Integer.MIN_VALUE;
+        minScore = Integer.MAX_VALUE;
     }
 
     /**
@@ -45,7 +46,7 @@ public class HighScoreHandler implements Serializable {
         {
             int i = 1;
 
-            while(input.hasNext()){
+            while(input.hasNextLine()){
                 String[] line = input.nextLine().split(",");
 
                 if(line.length%2 != 0) {
@@ -58,9 +59,9 @@ public class HighScoreHandler implements Serializable {
                 hsItem.setPosition(i++);
                 list.add(hsItem);
 
-                if (hsItem.getScore()>maxScore)
+                if (hsItem.getScore() > maxScore)
                     maxScore = hsItem.getScore();
-                else if(hsItem.getScore()<minScore)
+                else if(hsItem.getScore() < minScore)
                     minScore = hsItem.getScore();
             }
 
@@ -79,10 +80,8 @@ public class HighScoreHandler implements Serializable {
              PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
         ) {
 
-            //out.println("");
             for (HighScoreItem hsi : highScoresList) {
                 out.println(hsi.toStringToFile());
-
             }
 
         } catch (IOException e) {

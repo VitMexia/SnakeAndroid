@@ -14,7 +14,7 @@ import g12.li21n.poo.isel.pt.snakeandroid.Model.HighScoreItem;
 
 public class HighscoresActivity extends AppCompatActivity {
     private ListView scoreList;
-    private String[] scores;//= {"1. ABAS 100", "2. DEF 95", "3. GDSC 89", "4. FAK 89", "5. DIS 85", "6. SHT 81", "7. Nub 50", "8. AIR 32", "9. MBA 30", "10. EXT 29"};
+    private String[] scores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
