@@ -46,7 +46,7 @@ public class HighScoreHandler implements Serializable {
             int i = 1;
 
             while(input.hasNext()){
-                String[] line = input.next().split(",");
+                String[] line = input.nextLine().split(",");
 
                 if(line.length%2 != 0) {
                     break;

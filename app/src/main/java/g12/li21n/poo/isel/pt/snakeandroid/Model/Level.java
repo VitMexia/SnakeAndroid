@@ -76,11 +76,7 @@ public class Level implements Serializable {
 
         //goes through the list of mouses and Bad Snakes and each one does its thing
         for (MovingCells others : otherPlayers) {
-            if (others.isDead && others instanceof MouseCell) {
-                //otherPlayers.remove(others);
-                // TODO: isto é suposto estar comentado ? [Vit] Yep, precisa de ser re-escrito
 
-            } else
                 others.move(stepCount, mapHolder);
 
             if (others instanceof SnakeCells) {
