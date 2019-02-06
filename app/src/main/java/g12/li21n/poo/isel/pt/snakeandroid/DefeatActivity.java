@@ -10,7 +10,6 @@ import android.widget.Toast;
 public class DefeatActivity extends AppCompatActivity {
     private Button closebutton;
 
-    //TODO: criar activity única que substitui esta e victoryactivity trocando apenas a string\drawable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

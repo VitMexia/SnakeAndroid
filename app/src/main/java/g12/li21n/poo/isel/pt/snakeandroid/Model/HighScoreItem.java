@@ -2,6 +2,9 @@ package g12.li21n.poo.isel.pt.snakeandroid.Model;
 
 import java.io.Serializable;
 
+/**
+ * Represents an entry for the score board
+ */
 public class HighScoreItem implements Serializable {
 
     private String name;
@@ -13,7 +16,6 @@ public class HighScoreItem implements Serializable {
     public HighScoreItem(String name, int score){
         this.name = name;
         this.score = score;
-
     }
 
     public String getName() {
@@ -46,6 +48,7 @@ public class HighScoreItem implements Serializable {
 
     @Override
     public String toString() {
-        return position + ". " + name + " -> " + score;
+        String format = "%-6s%-15s%2s";;
+        return String.format(format, position,name, score);
     }
 }

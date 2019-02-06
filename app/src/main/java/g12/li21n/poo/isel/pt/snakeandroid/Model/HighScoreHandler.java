@@ -15,7 +15,9 @@ import java.util.Scanner;
 
 import static android.content.Context.MODE_PRIVATE;
 
-
+/**
+ * Container class for score board items
+ */
 public class HighScoreHandler implements Serializable {
 
     private final String highScoreFileName = "scores.txt";
@@ -30,6 +32,10 @@ public class HighScoreHandler implements Serializable {
 
     }
 
+    /**
+     * Load scores from disk file
+     * @return The list of score items
+     */
     private List<HighScoreItem> getScores() {
 
         List<HighScoreItem> list = new LinkedList<>();
@@ -42,19 +48,20 @@ public class HighScoreHandler implements Serializable {
             while(input.hasNext()){
                 String[] line = input.next().split(",");
 
-                if(line == null || line.length%2 != 0) {
+                if(line.length%2 != 0) {
                     break;
                 }
 
                 HighScoreItem hsItem = new HighScoreItem();
                 hsItem.setName(line[0]);
                 hsItem.setScore(Integer.parseInt(line[1]));
-                hsItem.setPosition(i);
-                i+=1;
+                hsItem.setPosition(i++);
                 list.add(hsItem);
 
-                if (hsItem.getScore()>maxScore) maxScore = hsItem.getScore();
-                else if(hsItem.getScore()<minScore)minScore = hsItem.getScore();
+                if (hsItem.getScore()>maxScore)
+                    maxScore = hsItem.getScore();
+                else if(hsItem.getScore()<minScore)
+                    minScore = hsItem.getScore();
             }
 
         } catch (IOException e) {
@@ -64,6 +71,9 @@ public class HighScoreHandler implements Serializable {
         return list;
     }
 
+    /**
+     * Saves current scores to file
+     */
     private void saveScores() {
         try (FileOutputStream outputStream = context.openFileOutput(highScoreFileName, MODE_PRIVATE);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(outputStream))
@@ -80,20 +90,28 @@ public class HighScoreHandler implements Serializable {
         }
     }
 
+    /**
+     * Check if a given score makes it into the top 10
+     * @param score The score to evaluate
+     * @return True if score belongs in top 10
+     */
     public boolean isTop10(int score){
         if(score> minScore || highScoresList.size()<10) return true;
         return false;
     }
 
+    /**
+     * Insert the new score into the board
+     * @param name Player name associated with the score
+     * @param score The amount of points in the score
+     */
     public void updateTop10(String name, int score){
-
         HighScoreItem newHSI = new HighScoreItem(name, score);
 
         int index = 0;
         boolean added = false;
         for (HighScoreItem hsi : highScoresList) {
-
-            if(hsi.getScore()<newHSI.getScore()) {
+            if(hsi.getScore() < newHSI.getScore()) {
                 highScoresList.add(index, newHSI);
                 added = true;
                 break;
@@ -103,12 +121,12 @@ public class HighScoreHandler implements Serializable {
                 added = true;
                 break;
             }
-
-            index +=1;
+            index++;
         }
-        if(!added) highScoresList.add(newHSI);
+        if(!added)
+            highScoresList.add(newHSI);
 
-        if(highScoresList.size()>10){
+        if(highScoresList.size() > 10){
             highScoresList.remove(10);
         }
         saveScores();

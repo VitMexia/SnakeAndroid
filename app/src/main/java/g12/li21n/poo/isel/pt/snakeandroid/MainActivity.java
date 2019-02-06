@@ -151,7 +151,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Block for restoring the current instance state, if any
         if (savedInstanceState != null) {
-            // TODO: colocar estas strings chave todas em resource?
             model = (Game) savedInstanceState.getSerializable("game");
             level = (Level) savedInstanceState.getSerializable("level");
 
